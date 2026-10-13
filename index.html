@@ -1,0 +1,2084 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2C4A9A">
+<meta name="description" content="A 7-day Japanese crash course for a trip to Japan.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>window.TABI_PWA = true;</script>
+<title>Tabi Nihongo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Klee+One:wght@400;600&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column like a rail pass, sticky header on top, tab bar fixed to the bottom; big kana sit in manuscript-grid squares. */
+:root {
+  --bg: #ECF0ED;
+  --surface: #FFFFFF;
+  --surface-2: #E1E8E3;
+  --ink: #1A2230;
+  --muted: #5A6570;
+  --line: #CBD5CF;
+  --grid: #E3B9B9;
+  --accent: #2C4A9A;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DCE3F5;
+  --noun: #A8620A; --noun-soft: #FBEBD3;
+  --verb: #0F7666; --verb-soft: #D2EEE9;
+  --prt: #A82A60;  --prt-soft: #F7DCE7;
+  --good: #1D7547; --good-soft: #D5EEDF;
+  --bad: #B3261E;  --bad-soft: #F7DAD7;
+  --font-ui: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --font-jp: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+  --font-kana: "Klee One", "Zen Maru Gothic", "Hiragino Mincho ProN", "Noto Serif JP", serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10151C; --surface: #19212B; --surface-2: #232D39; --ink: #E5EBF0; --muted: #98A4AF; --line: #2F3A47; --grid: #5A3A40;
+    --accent: #93AAF0; --accent-ink: #0E1524; --accent-soft: #26314E;
+    --noun: #F0B460; --noun-soft: #3A2C17; --verb: #5CCFBC; --verb-soft: #163430; --prt: #F08BB5; --prt-soft: #3B1D2A;
+    --good: #6BD49A; --good-soft: #173426; --bad: #F28B82; --bad-soft: #3D1D1B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10151C; --surface: #19212B; --surface-2: #232D39; --ink: #E5EBF0; --muted: #98A4AF; --line: #2F3A47; --grid: #5A3A40;
+  --accent: #93AAF0; --accent-ink: #0E1524; --accent-soft: #26314E;
+  --noun: #F0B460; --noun-soft: #3A2C17; --verb: #5CCFBC; --verb-soft: #163430; --prt: #F08BB5; --prt-soft: #3B1D2A;
+  --good: #6BD49A; --good-soft: #173426; --bad: #F28B82; --bad-soft: #3D1D1B;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); }
+body { font-family: var(--font-ui); font-size: 15px; line-height: 1.5; -webkit-tap-highlight-color: transparent; }
+html.no-romaji .rj { display: none !important; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.jp { font-family: var(--font-jp); }
+.rj { color: var(--muted); font-size: .86em; letter-spacing: .01em; }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.top-in { max-width: 760px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: .01em; margin-right: auto; min-width: 0; }
+.brand .mark { font-family: var(--font-kana); font-weight: 600; font-size: 22px; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 8px; background: var(--accent); color: var(--accent-ink); }
+.brand .name { white-space: nowrap; }
+.daybadge { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px dashed var(--accent); color: var(--accent); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rtoggle { display: flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: var(--surface); padding: 5px 10px 5px 8px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.rtoggle .sw { width: 30px; height: 18px; border-radius: 999px; background: var(--surface-2); position: relative; transition: background .15s; }
+.rtoggle .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--muted); transition: transform .15s, background .15s; }
+.rtoggle[aria-pressed="true"] .sw { background: var(--accent); }
+.rtoggle[aria-pressed="true"] .sw::after { transform: translateX(12px); background: var(--accent-ink); }
+.iconbtn { border: 1px solid var(--line); background: var(--surface); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; }
+.iconbtn svg { width: 18px; height: 18px; }
+
+main { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 18px calc(96px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 22px; }
+main > * { min-width: 0; }
+
+/* tab bar */
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.tabs-in { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); }
+.tab { border: 0; background: none; padding: 8px 2px 9px; display: grid; justify-items: center; gap: 1px; color: var(--muted); font-size: 11px; font-weight: 600; }
+.tab .g { font-family: var(--font-kana); font-weight: 600; font-size: 21px; line-height: 1.2; }
+.tab[aria-current="page"] { color: var(--accent); }
+.tab[aria-current="page"] .g { text-decoration: underline 2px; text-underline-offset: 5px; }
+
+/* type */
+h1 { font-size: 26px; line-height: 1.15; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 10px; font-weight: 700; }
+h3 { font-size: 17px; margin: 0; }
+p { margin: 0; }
+.lede { color: var(--muted); }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.stack { display: grid; gap: 12px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 9px 14px; border-radius: 10px; font-weight: 600; font-size: 14px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.ghost { background: transparent; }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.wide { width: 100%; padding: 12px; font-size: 15px; }
+.seg { display: inline-flex; background: var(--surface-2); border-radius: 10px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: none; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .08); }
+.chip { border: 1px solid var(--line); background: var(--surface); padding: 5px 11px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.speak { border: 1px solid var(--line); background: var(--surface); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; color: var(--accent); }
+.speak svg { width: 16px; height: 16px; }
+
+/* today */
+.hero { display: grid; gap: 8px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.stat b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.stat span { font-size: 12px; color: var(--muted); }
+@media (max-width: 520px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+.days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.day { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 7px 2px; display: grid; justify-items: center; gap: 1px; font-variant-numeric: tabular-nums; }
+.day b { font-size: 17px; }
+.day span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.day.done { background: var(--surface-2); }
+.day.locked { opacity: .55; border-style: dashed; }
+.day[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.steps { display: grid; gap: 10px; }
+.step { display: grid; grid-template-columns: 30px 1fr auto; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; }
+.step .n { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--accent); color: var(--accent); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.step.ok .n { background: var(--good); border-color: var(--good); color: var(--surface); }
+.step > div { min-width: 0; }
+.step p { font-size: 13px; color: var(--muted); }
+.bar { height: 5px; border-radius: 9px; background: var(--surface-2); overflow: hidden; margin-top: 6px; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 9px; }
+.pchips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.pchip { border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px; padding: 3px 9px; font-family: var(--font-jp); font-size: 14px; }
+@media (max-width: 520px) { .step { grid-template-columns: 30px 1fr; } .step > .btn { grid-column: 2; justify-self: start; } }
+
+.wordlist { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.wl-cat { padding: 10px 14px 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); background: var(--surface-2); }
+.wl-item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 9px 14px; border-top: 1px solid var(--line); }
+.wl-item .jp { font-size: 18px; line-height: 1.3; }
+.wl-item .kj { font-family: var(--font-jp); color: var(--muted); font-size: 13px; margin-left: 6px; }
+.wl-item .en { font-size: 14px; }
+@media (max-width: 520px) { .wl-item { grid-template-columns: minmax(0, 1fr) auto; } .wl-item .en { grid-column: 1; grid-row: 2; color: var(--muted); } .wl-item .speak { grid-row: 1 / span 2; grid-column: 2; } }
+
+/* flash cards & kana */
+.genko { position: relative; display: grid; place-items: center; width: min(190px, 52vw); aspect-ratio: 1; max-width: 100%; margin: 0 auto; border: 1.5px solid var(--grid); border-radius: 4px; background:
+  linear-gradient(to right, transparent calc(50% - .5px), var(--grid) calc(50% - .5px), var(--grid) calc(50% + .5px), transparent calc(50% + .5px)),
+  linear-gradient(to bottom, transparent calc(50% - .5px), var(--grid) calc(50% - .5px), var(--grid) calc(50% + .5px), transparent calc(50% + .5px)),
+  var(--surface); }
+.genko .ch { font-family: var(--font-kana); font-weight: 600; font-size: clamp(64px, 20vw, 104px); line-height: 1; }
+.genko.wide { width: auto; min-width: min(190px, 52vw); padding: 0 18px; }
+.flash { display: grid; gap: 14px; text-align: center; padding: 22px 16px; }
+.flash .tags { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; background: var(--surface-2); color: var(--muted); }
+.tag.new { background: var(--accent-soft); color: var(--accent); }
+.flash .bigjp { font-family: var(--font-kana); font-weight: 600; font-size: clamp(28px, 8vw, 42px); line-height: 1.3; overflow-wrap: anywhere; }
+.flash .kj { font-family: var(--font-jp); color: var(--muted); font-size: 16px; }
+.flash .bigen { font-size: 22px; font-weight: 600; text-wrap: balance; }
+.flash .extra { font-size: 13px; color: var(--muted); }
+.flash .divider { height: 1px; background: var(--line); margin: 2px 0; }
+.rates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.rate { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 9px 4px; display: grid; gap: 1px; font-weight: 700; font-size: 14px; }
+.rate small { font-weight: 500; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.rate.r0 { color: var(--bad); } .rate.r3 { color: var(--good); }
+.topicrow { display: flex; align-items: center; gap: 10px; }
+.topicrow select { flex: 1; min-width: 0; }
+.focusbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.focusbar label { display: grid; min-width: 0; }
+.focusctl { display: flex; align-items: center; gap: 10px; }
+.focusctl input[type="range"] { width: 160px; accent-color: var(--accent); }
+.focusctl output { min-width: 2.6em; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .focusbar { grid-template-columns: 1fr; } .focusctl input[type="range"] { flex: 1; width: auto; min-width: 0; } }
+.focusdots { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.fd { width: 12px; height: 12px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); }
+.fd.again { background: var(--bad-soft); border-color: var(--bad); }
+.fd.hard { background: var(--noun-soft); border-color: var(--noun); }
+.fd.ok { background: var(--good-soft); border-color: var(--good); }
+.fd.now { outline: 2px solid var(--accent); outline-offset: 1px; }
+.focusdots .small { margin-left: 6px; }
+.kbd { font-size: 11px; color: var(--muted); text-align: center; }
+
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 14px 8px; font-size: 20px; font-weight: 600; }
+.opt.kana { font-family: var(--font-kana); font-size: 32px; padding: 8px; }
+.opt.right { border-color: var(--good); background: var(--good-soft); color: var(--good); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.typein { display: flex; gap: 8px; }
+.typein input { flex: 1; min-width: 0; font: inherit; font-size: 20px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); text-align: center; }
+.fb { text-align: center; font-weight: 600; min-height: 1.5em; }
+.fb.good { color: var(--good); } .fb.bad { color: var(--bad); }
+
+.kgrid { display: grid; gap: 6px; }
+.gchip { font-family: var(--font-kana); font-weight: 600; font-size: 16px; padding: 1px 9px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.glabel { min-width: 44px; }
+.banner { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; background: var(--good-soft); color: var(--good); border-radius: 10px; padding: 8px 12px; font-weight: 600; }
+.btn.small { padding: 5px 10px; font-size: 13px; }
+.glist { display: grid; gap: 6px; }
+.grow { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+.grow.isf { background: var(--accent-soft); border-color: var(--accent); }
+.gk { font-family: var(--font-kana); font-weight: 600; font-size: 22px; display: flex; flex-wrap: wrap; gap: 2px 10px; min-width: 0; }
+.gk .lv1 { color: var(--noun); } .gk .lv2 { color: var(--good); }
+.gp { font-variant-numeric: tabular-nums; }
+.gt { display: flex; gap: 6px; }
+@media (max-width: 520px) { .grow { grid-template-columns: minmax(0, 1fr) auto; } .gt { grid-column: 1 / -1; } }
+.intro { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
+.bigspk { width: 96px; height: 96px; border-radius: 50%; border: 2px solid var(--accent); background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
+.bigspk svg { width: 40px; height: 40px; }
+.wordbox { display: grid; place-items: center; padding: 20px 8px; border: 1.5px solid var(--grid); border-radius: 6px; background: var(--surface); }
+.readw { font-family: var(--font-kana); font-weight: 600; font-size: clamp(38px, 12vw, 60px); letter-spacing: .08em; line-height: 1.2; overflow-wrap: anywhere; text-align: center; }
+.wordopts .opt { font-size: 17px; }
+.units { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
+.unit { display: grid; justify-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 4px 9px; background: var(--surface-2); }
+.unit .k { font-family: var(--font-kana); font-weight: 600; font-size: 22px; line-height: 1.2; } .unit .l { font-size: 12px; color: var(--muted); }
+.match { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mcol { display: grid; gap: 8px; }
+.mcell { border: 1.5px solid var(--line); border-bottom-width: 3px; background: var(--surface); border-radius: 10px; padding: 10px; font-size: 18px; font-weight: 600; }
+.mcell.kana { font-family: var(--font-kana); font-size: 26px; padding: 4px; }
+.mcell.sel { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.mcell.bad { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.mcell.done { opacity: .4; border-color: var(--good); background: var(--good-soft); color: var(--good); }
+.krow { display: grid; grid-template-columns: repeat(var(--cols, 5), 1fr); gap: 6px; }
+.kcell { border: 1px solid var(--line); background: var(--surface); border-radius: 9px; padding: 6px 2px 4px; display: grid; justify-items: center; }
+.kcell .k { font-family: var(--font-kana); font-weight: 600; font-size: 24px; line-height: 1.2; }
+.kcell .l { font-size: 11px; color: var(--muted); }
+.kcell.m1 { background: var(--noun-soft); }
+.kcell.m2 { background: var(--good-soft); border-color: var(--good); }
+.kcell.empty { visibility: hidden; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; border: 1px solid var(--line); }
+
+/* patterns */
+.plist { display: grid; gap: 8px; }
+.prow { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; }
+.prow .t { font-family: var(--font-jp); font-size: 18px; }
+.prow .m { color: var(--muted); font-size: 13px; grid-column: 1; }
+.prow .lk { grid-row: 1 / span 2; grid-column: 2; font-size: 12px; color: var(--muted); }
+.prow.locked { opacity: .6; }
+.formula { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; }
+.fslot { border-radius: 9px; padding: 6px 10px; display: grid; justify-items: center; font-family: var(--font-jp); font-size: 18px; line-height: 1.25; border: 1.5px solid transparent; }
+.fslot small { font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+.fslot.n { background: var(--noun-soft); color: var(--noun); border-color: var(--noun); border-style: dashed; }
+.fslot.v { background: var(--verb-soft); color: var(--verb); border-color: var(--verb); border-style: dashed; }
+.fslot.p { background: var(--prt-soft); color: var(--prt); }
+.fslot.f { background: var(--surface-2); color: var(--ink); }
+.notes { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.ex { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.ex:first-child { border-top: 0; }
+.ex .jp { font-size: 18px; }
+.ex .en { color: var(--muted); font-size: 14px; }
+.ex .speak { grid-row: 1 / span 3; grid-column: 2; }
+.back { border: 0; background: none; color: var(--accent); font-weight: 600; padding: 0; justify-self: start; }
+details.cheat summary { cursor: pointer; font-weight: 700; }
+.cheat table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+.cheat td { padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+.cheat td:first-child { font-family: var(--font-jp); font-size: 20px; color: var(--prt); width: 46px; text-align: center; }
+.cheat .tw { overflow-x: auto; }
+
+/* builder */
+.prompt { display: grid; gap: 6px; }
+.prompt .en { font-size: 22px; font-weight: 600; text-wrap: balance; }
+.answer { min-height: 70px; border: 1.5px dashed var(--line); border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.answer.good { border-color: var(--good); border-style: solid; background: var(--good-soft); }
+.answer.bad { border-color: var(--bad); border-style: solid; background: var(--bad-soft); }
+.answer:empty::before { content: "Tap the tiles in order"; color: var(--muted); font-size: 13px; padding: 14px 6px; }
+.bank { display: flex; flex-wrap: wrap; gap: 8px; }
+.tile { border: 1.5px solid var(--line); border-bottom-width: 3px; background: var(--surface); border-radius: 10px; padding: 6px 12px; display: grid; justify-items: center; line-height: 1.25; }
+.tile .jp { font-size: 19px; }
+.tile .rj { font-size: 11px; }
+.tile.used { visibility: hidden; }
+.tile.prt .jp { color: var(--prt); }
+.solution { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; }
+.solution .jp { font-size: 20px; }
+.solution .speak { grid-row: 1 / span 2; grid-column: 2; }
+select { font: inherit; font-size: 14px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); max-width: 100%; }
+
+/* phrases */
+.search { width: 100%; font: inherit; font-size: 16px; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.phr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1px 12px; align-items: center; padding: 11px 14px; border-top: 1px solid var(--line); }
+.phr .jp { font-size: 18px; line-height: 1.35; overflow-wrap: anywhere; }
+.phr .en { font-size: 14px; color: var(--muted); }
+.phr .speak { grid-row: 1 / span 3; grid-column: 2; }
+
+/* sheet */
+.scrim { position: fixed; inset: 0; z-index: 40; background: rgb(10 14 20 / .45); display: grid; align-items: end; justify-items: center; }
+.sheet { width: 100%; max-width: 560px; max-height: 90vh; overflow: auto; background: var(--surface); border-radius: 18px 18px 0 0; padding: 18px 16px calc(22px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
+@media (min-width: 600px) { .scrim { align-items: center; } .sheet { border-radius: 18px; } }
+.set { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.set p { font-size: 13px; color: var(--muted); grid-column: 1; }
+.set > :last-child { grid-row: 1 / span 2; grid-column: 2; }
+.set input[type="date"] { font: inherit; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.danger { color: var(--bad); border-color: var(--bad); }
+.xfer { display: grid; gap: 8px; }
+.xfer textarea { width: 100%; font: 12px/1.4 ui-monospace, monospace; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); resize: vertical; word-break: break-all; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(80px + env(safe-area-inset-bottom, 0px)); z-index: 50; background: var(--ink); color: var(--bg); padding: 9px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; max-width: calc(100% - 32px); }
+.empty { text-align: center; padding: 28px 16px; display: grid; gap: 10px; justify-items: center; }
+.empty .ch { font-family: var(--font-kana); font-size: 46px; color: var(--accent); line-height: 1; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@keyframes pop { from { transform: scale(.97); opacity: .6; } to { transform: none; opacity: 1; } }
+.pop { animation: pop .16s ease-out; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><span class="mark" aria-hidden="true">旅</span><span class="name">Tabi Nihongo</span></div>
+    <span class="daybadge" id="daybadge">Day 1</span>
+    <button class="rtoggle" id="rtoggle" aria-pressed="true" title="Show or hide romaji everywhere"><span class="sw" aria-hidden="true"></span>Romaji</button>
+    <button class="iconbtn" id="openSettings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-in">
+    <button class="tab" data-tab="today"><span class="g">今</span>Today</button>
+    <button class="tab" data-tab="kana"><span class="g">あ</span>Kana</button>
+    <button class="tab" data-tab="cards"><span class="g">札</span>Cards</button>
+    <button class="tab" data-tab="patterns"><span class="g">型</span>Patterns</button>
+    <button class="tab" data-tab="build"><span class="g">組</span>Build</button>
+    <button class="tab" data-tab="phrases"><span class="g">話</span>Phrases</button>
+  </div>
+</nav>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="setTitle" id="sheet"></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* =========================================================================
+   COURSE CONTENT
+   ========================================================================= */
+
+// day|category|kana|kanji|english
+const VOCAB_RAW = `
+1|greet|こんにちは||hello / good afternoon
+1|greet|おはようございます||good morning
+1|greet|こんばんは||good evening
+1|greet|さようなら||goodbye
+1|greet|おやすみなさい||good night
+1|greet|ありがとうございます||thank you (polite)
+1|greet|どうも||thanks (casual)
+1|greet|すみません||excuse me / sorry
+1|greet|ごめんなさい||I'm sorry
+1|greet|おねがいします|お願いします|please (when asking for something)
+1|greet|どうぞ||go ahead / here you are
+1|greet|はい||yes
+1|greet|いいえ||no
+1|greet|はじめまして|初めまして|nice to meet you
+1|greet|よろしく おねがいします|よろしくお願いします|pleased to meet you
+1|greet|いただきます||said before eating
+1|greet|ごちそうさまでした||said after eating (thanks for the meal)
+1|greet|だいじょうぶ です|大丈夫です|it's OK / I'm fine
+1|greet|わかりません|分かりません|I don't understand
+1|greet|いい です ね||that's nice
+1|greet|ちょっと まって ください|ちょっと待ってください|wait a moment, please
+1|greet|もう いちど おねがいします|もう一度お願いします|once more, please
+1|greet|ゆっくり おねがいします||slowly, please
+1|greet|すこし|少し|a little
+1|people|わたし|私|I / me
+1|people|あなた||you (people usually use names)
+1|people|かのじょ|彼女|she / girlfriend
+1|people|かれし|彼氏|boyfriend
+1|people|ともだち|友達|friend
+1|people|〜さん||Mr. / Ms. (after a name)
+1|people|にほん|日本|Japan
+1|people|にほんじん|日本人|Japanese person
+1|people|にほんご|日本語|Japanese (language)
+1|people|えいご|英語|English (language)
+1|people|スペイン||Spain
+1|people|スペインじん|スペイン人|Spanish person
+1|people|かんこうきゃく|観光客|tourist
+1|point|これ||this (near me)
+1|point|それ||that (near you)
+1|point|あれ||that (over there)
+1|point|どれ||which one
+1|point|ここ||here
+1|point|そこ||there
+1|point|あそこ||over there
+1|point|どこ||where
+1|point|なん / なに|何|what
+1|point|だれ|誰|who
+1|point|いつ||when
+2|num|いち|一|1
+2|num|に|二|2
+2|num|さん|三|3
+2|num|よん|四|4
+2|num|ご|五|5
+2|num|ろく|六|6
+2|num|なな|七|7
+2|num|はち|八|8
+2|num|きゅう|九|9
+2|num|じゅう|十|10
+2|num|ひゃく|百|100
+2|num|せん|千|1,000
+2|num|まん|万|10,000
+2|num|えん|円|yen
+2|num|いくら||how much
+2|num|ひとつ|一つ|one (thing)
+2|num|ふたつ|二つ|two (things)
+2|num|みっつ|三つ|three (things)
+2|num|よっつ|四つ|four (things)
+2|num|いつつ|五つ|five (things)
+2|num|いくつ||how many (things)
+2|num|ひとり|一人|one person / alone
+2|num|ふたり|二人|two people
+2|num|なんにん|何人|how many people
+2|num|ぜんぶ|全部|all / everything
+2|time|いま|今|now
+2|time|きょう|今日|today
+2|time|あした|明日|tomorrow
+2|time|きのう|昨日|yesterday
+2|time|あさ|朝|morning
+2|time|ひる|昼|noon / daytime
+2|time|よる|夜|night
+2|time|〜じ|〜時|... o'clock
+2|time|〜ふん / 〜ぷん|〜分|... minutes
+2|time|なんじ|何時|what time
+2|time|はん|半|half past
+2|time|ごぜん|午前|a.m.
+2|time|ごご|午後|p.m.
+2|time|〜じかん|〜時間|... hours (how long)
+2|time|まいにち|毎日|every day
+3|food|みず|水|water
+3|food|おちゃ|お茶|green tea
+3|food|コーヒー||coffee
+3|food|ビール||beer
+3|food|おさけ|お酒|sake / alcohol
+3|food|ジュース||juice
+3|food|ごはん|ご飯|rice / meal
+3|food|すし|寿司|sushi
+3|food|ラーメン||ramen
+3|food|うどん||udon (thick noodles)
+3|food|そば||soba (buckwheat noodles)
+3|food|てんぷら|天ぷら|tempura
+3|food|やきとり|焼き鳥|grilled chicken skewers
+3|food|とんかつ||breaded pork cutlet
+3|food|カレー||curry
+3|food|おこのみやき|お好み焼き|savory pancake
+3|food|たこやき|たこ焼き|octopus balls
+3|food|にく|肉|meat
+3|food|さかな|魚|fish
+3|food|とりにく|鶏肉|chicken
+3|food|ぶたにく|豚肉|pork
+3|food|ぎゅうにく|牛肉|beef
+3|food|やさい|野菜|vegetables
+3|food|たまご|卵|egg
+3|food|パン||bread
+3|food|デザート||dessert
+3|food|アイスクリーム||ice cream
+3|rest|メニュー||menu
+3|rest|えいご の メニュー|英語のメニュー|English menu
+3|rest|おすすめ||recommendation
+3|rest|ちゅうもん|注文|order
+3|rest|おかいけい|お会計|the bill
+3|rest|はし|箸|chopsticks
+3|rest|フォーク||fork
+3|rest|スプーン||spoon
+3|rest|よやく|予約|reservation
+3|rest|せき|席|seat / table
+3|rest|きんえん|禁煙|non-smoking
+3|rest|アレルギー||allergy
+3|rest|ベジタリアン||vegetarian
+3|rest|おかわり||refill / another helping
+3|rest|てんいん|店員|staff (in a shop)
+3|taste|おいしい|美味しい|delicious
+3|taste|まずい||tastes bad
+3|taste|からい|辛い|spicy
+3|taste|あまい|甘い|sweet
+3|taste|あつい|熱い|hot (to the touch)
+3|taste|つめたい|冷たい|cold (to the touch)
+3|taste|おなか が すきました|お腹が空きました|I'm hungry
+3|taste|のど が かわきました|喉が渇きました|I'm thirsty
+4|trans|えき|駅|station
+4|trans|でんしゃ|電車|train
+4|trans|ちかてつ|地下鉄|subway
+4|trans|しんかんせん|新幹線|bullet train
+4|trans|バス||bus
+4|trans|タクシー||taxi
+4|trans|ひこうき|飛行機|airplane
+4|trans|くうこう|空港|airport
+4|trans|きっぷ|切符|ticket
+4|trans|〜せん|〜線|... line (train line)
+4|trans|〜ばんせん|〜番線|platform number ...
+4|trans|のりば|乗り場|boarding area
+4|trans|のりかえ|乗り換え|transfer
+4|trans|いりぐち|入口|entrance
+4|trans|でぐち|出口|exit
+4|trans|〜ゆき|〜行き|bound for ...
+4|trans|つぎ|次|next
+4|trans|しゅうでん|終電|last train
+4|place|トイレ||toilet
+4|place|ホテル||hotel
+4|place|みせ|店|shop
+4|place|レストラン||restaurant
+4|place|コンビニ||convenience store
+4|place|ぎんこう|銀行|bank
+4|place|まち|町|town
+4|dir|みぎ|右|right
+4|dir|ひだり|左|left
+4|dir|まっすぐ||straight ahead
+4|dir|まえ|前|in front
+4|dir|うしろ|後ろ|behind
+4|dir|となり|隣|next to
+4|dir|ちかく|近く|nearby
+4|dir|ちかい|近い|close
+4|dir|とおい|遠い|far
+4|dir|きた|北|north
+4|dir|みなみ|南|south
+4|dir|ひがし|東|east
+4|dir|にし|西|west
+4|dir|うえ|上|up / above
+4|dir|した|下|down / below
+4|dir|かど|角|corner
+4|dir|しんごう|信号|traffic light
+5|shop|おみやげ|お土産|souvenir
+5|shop|くすりや|薬屋|pharmacy
+5|shop|スーパー||supermarket
+5|shop|デパート||department store
+5|shop|たかい|高い|expensive / tall
+5|shop|やすい|安い|cheap
+5|shop|おおきい|大きい|big
+5|shop|ちいさい|小さい|small
+5|shop|あたらしい|新しい|new
+5|shop|ふるい|古い|old (things)
+5|shop|いい||good
+5|shop|わるい|悪い|bad
+5|shop|ほしい|欲しい|want (a thing)
+5|shop|サイズ||size
+5|shop|いろ|色|color
+5|shop|あか|赤|red
+5|shop|あお|青|blue
+5|shop|しろ|白|white
+5|shop|くろ|黒|black
+5|shop|カード||card
+5|shop|げんきん|現金|cash
+5|shop|ふくろ|袋|bag
+5|shop|レシート||receipt
+5|shop|めんぜい|免税|tax-free
+5|shop|しちゃく|試着|trying on (clothes)
+5|hotel|へや|部屋|room
+5|hotel|かぎ|鍵|key
+5|hotel|にもつ|荷物|luggage
+5|hotel|チェックイン||check-in
+5|hotel|チェックアウト||check-out
+5|hotel|ワイファイ||Wi-Fi
+5|hotel|パスワード||password
+5|hotel|タオル||towel
+5|hotel|おふろ|お風呂|bath
+5|hotel|おんせん|温泉|hot spring
+5|hotel|ふとん|布団|futon
+5|hotel|あさごはん|朝ご飯|breakfast
+5|hotel|ばんごはん|晩ご飯|dinner
+5|hotel|なまえ|名前|name
+5|hotel|〜はく|〜泊|... nights (stay)
+6|sight|おてら|お寺|temple
+6|sight|じんじゃ|神社|shrine
+6|sight|おしろ|お城|castle
+6|sight|こうえん|公園|park
+6|sight|びじゅつかん|美術館|art museum
+6|sight|はくぶつかん|博物館|museum
+6|sight|うみ|海|sea
+6|sight|やま|山|mountain
+6|sight|ふじさん|富士山|Mt. Fuji
+6|sight|さくら|桜|cherry blossom
+6|sight|こうよう|紅葉|autumn leaves
+6|sight|しゃしん|写真|photo
+6|sight|ちず|地図|map
+6|sight|きっぷうりば|切符売り場|ticket office
+6|sight|にゅうじょうりょう|入場料|entry fee
+6|sight|まつり|祭り|festival
+6|feel|きれい||beautiful / clean
+6|feel|かわいい||cute
+6|feel|すごい||amazing
+6|feel|たのしい|楽しい|fun
+6|feel|うれしい|嬉しい|happy / glad
+6|feel|つかれました|疲れました|I'm tired
+6|feel|すき|好き|like
+6|feel|だいすき|大好き|love / like a lot
+6|feel|おもしろい|面白い|interesting / funny
+6|feel|しずか|静か|quiet
+6|feel|にぎやか||lively
+6|feel|さむい|寒い|cold (weather)
+6|feel|あつい|暑い|hot (weather)
+6|feel|いっしょに|一緒に|together
+6|emerg|たすけて|助けて|help!
+6|emerg|けいさつ|警察|police
+6|emerg|こうばん|交番|police box
+6|emerg|びょういん|病院|hospital
+6|emerg|きゅうきゅうしゃ|救急車|ambulance
+6|emerg|くすり|薬|medicine
+6|emerg|いたい|痛い|it hurts / painful
+6|emerg|あたま|頭|head
+6|emerg|おなか|お腹|stomach
+6|emerg|あし|足|leg / foot
+6|emerg|のど|喉|throat
+6|emerg|ねつ|熱|fever
+6|emerg|さいふ|財布|wallet
+6|emerg|パスポート||passport
+6|emerg|スマホ||smartphone
+6|emerg|あぶない|危ない|dangerous / watch out!
+7|love|かんぱい|乾杯|cheers!
+7|love|デート||date
+7|love|こいびと|恋人|sweetheart
+7|love|ロマンチック||romantic
+7|love|ゆうひ|夕日|sunset
+7|love|よぞら|夜空|night sky
+7|love|ずっと||always / forever
+7|love|しあわせ|幸せ|happy / happiness
+7|love|おもいで|思い出|memory (a good memory)
+7|love|あいしてる|愛してる|I love you
+`;
+
+// Extra short words for kana reading practice (kana|meaning): built mostly from early kana rows.
+const READ_EXTRA_RAW = `
+あい|love
+いえ|house
+うえ|above
+あお|blue
+あおい|blue (adjective)
+かお|face
+あき|autumn
+いけ|pond
+こい|carp (fish)
+かき|persimmon
+きく|to listen
+いく|to go
+かく|to write
+おおきい|big
+あかい|red
+さけ|salmon
+あさ|morning
+いす|chair
+うそ|a lie
+しお|salt
+すし|sushi
+せかい|world
+すき|like
+たこ|octopus
+ちかい|close
+つくえ|desk
+そと|outside
+した|below
+くち|mouth
+とけい|clock
+なつ|summer
+ねこ|cat
+いぬ|dog
+なに|what
+おかね|money
+なか|inside
+はな|flower / nose
+ひと|person
+ふね|ship
+ほし|star
+へそ|belly button
+はし|chopsticks / bridge
+ひこうき|airplane
+まち|town
+みみ|ear
+むし|insect
+あめ|rain / candy
+もも|peach
+みせ|shop
+やま|mountain
+ゆき|snow
+よる|night
+へや|room
+ゆめ|dream
+はる|spring
+ふゆ|winter
+くるま|car
+さくら|cherry blossom
+しろ|white / castle
+くろ|black
+いろ|color
+わたし|I / me
+かわ|river
+ほん|book
+みかん|mandarin orange
+にほん|Japan
+てんき|weather
+ごはん|rice / meal
+かぞく|family
+でんわ|telephone
+ぶた|pig
+えんぴつ|pencil
+ぎんこう|bank
+ばんごう|number
+ぺこぺこ|starving
+じかん|time
+きゃく|guest
+しゃしん|photo
+ちゃわん|rice bowl
+にんぎょう|doll
+りょかん|Japanese inn
+びょういん|hospital
+ひゃく|hundred
+アイス|ice cream
+ケーキ|cake
+カメラ|camera
+ココア|cocoa
+スキー|skiing
+タクシー|taxi
+テニス|tennis
+ホテル|hotel
+メモ|memo
+ラーメン|ramen
+ノート|notebook
+トマト|tomato
+ナイフ|knife
+バス|bus
+パン|bread
+ペン|pen
+テレビ|TV
+ビール|beer
+ゲーム|game
+サラダ|salad
+ピザ|pizza
+ワイン|wine
+ミルク|milk
+カード|card
+チーズ|cheese
+ジュース|juice
+シャツ|shirt
+ニュース|news
+メニュー|menu
+コーヒー|coffee
+チョコ|chocolate
+ジャム|jam
+パーティー|party
+フォーク|fork
+ソファ|sofa
+カフェ|cafe
+`;
+
+// day|ます form|kanji|て form|english base|english past
+const VERBS_RAW = `
+4|いきます|行きます|いって|go|went
+4|きます|来ます|きて|come|came
+4|かえります|帰ります|かえって|go back / go home|went back
+4|のります|乗ります|のって|get on / ride|got on
+4|おります|降ります|おりて|get off|got off
+4|あるきます|歩きます|あるいて|walk|walked
+4|まがります|曲がります|まがって|turn|turned
+4|とまります|止まります|とまって|stop|stopped
+4|つきます|着きます|ついて|arrive|arrived
+4|わかります|分かります|わかって|understand|understood
+4|あります||あって|there is / have (things)|there was
+4|います||いて|there is / be (people, animals)|was
+4|おきます|起きます|おきて|get up|got up
+4|ねます|寝ます|ねて|sleep / go to bed|slept
+5|たべます|食べます|たべて|eat|ate
+5|のみます|飲みます|のんで|drink|drank
+5|かいます|買います|かって|buy|bought
+5|みます|見ます|みて|see / watch|saw
+5|します||して|do|did
+5|はらいます|払います|はらって|pay|paid
+5|とまります|泊まります|とまって|stay (at a hotel)|stayed
+5|まちます|待ちます|まって|wait|waited
+5|さがします|探します|さがして|look for|looked for
+5|つかいます|使います|つかって|use|used
+5|あけます|開けます|あけて|open|opened
+5|しめます|閉めます|しめて|close|closed
+5|あずけます|預けます|あずけて|leave (luggage) with someone|left
+6|とります|撮ります|とって|take (a photo)|took
+6|てつだいます|手伝います|てつだって|help|helped
+6|よびます|呼びます|よんで|call (someone)|called
+6|なくします|無くします|なくして|lose|lost
+6|おしえます|教えます|おしえて|tell / teach|told
+6|いいます|言います|いって|say|said
+6|はなします|話します|はなして|speak|spoke
+6|かきます|書きます|かいて|write / draw|wrote
+6|あいます|会います|あって|meet|met
+6|やすみます|休みます|やすんで|rest|rested
+6|あそびます|遊びます|あそんで|have fun / hang out|had fun
+`;
+
+const PHRASES = [
+  { id: 'basics', title: 'Basics', d: 1, items: [
+    ['すみません、 えいご を はなせますか', 'Excuse me, do you speak English?'],
+    ['にほんご は すこし だけ です', 'I only speak a little Japanese.'],
+    ['わかりません', "I don't understand."],
+    ['もう いちど おねがいします', 'Once more, please.'],
+    ['ゆっくり おねがいします', 'Slowly, please.'],
+    ['これ は にほんご で なん ですか', 'What is this in Japanese?'],
+    ['トイレ は どこ ですか', 'Where is the toilet?'],
+    ['だいじょうぶ です', "It's fine / I'm OK."],
+    ['いいえ、 けっこう です', 'No, thank you.'],
+    ['はじめまして、 〜 です', "Nice to meet you, I'm ~."],
+    ['スペイン から きました', 'I came from Spain.'],
+  ]},
+  { id: 'time', title: 'Numbers & time', d: 2, items: [
+    ['いま なんじ ですか', 'What time is it now?'],
+    ['ぜんぶ で いくら ですか', 'How much is it all together?'],
+    ['なんぷん かかりますか', 'How many minutes does it take?'],
+    ['なんじ に あきますか', 'What time does it open?'],
+    ['なんじ まで ですか', 'Until what time are you open?'],
+    ['あした の あさ', 'tomorrow morning'],
+  ]},
+  { id: 'eat', title: 'Restaurant', d: 3, items: [
+    ['ふたり です', 'Two people (table for two).'],
+    ['えいご の メニュー は ありますか', 'Do you have an English menu?'],
+    ['おすすめ は なん ですか', 'What do you recommend?'],
+    ['これ を ください', 'This one, please.'],
+    ['これ に します', "I'll have this."],
+    ['みず を ふたつ ください', 'Two waters, please.'],
+    ['にく なし で おねがいします', 'Without meat, please.'],
+    ['アレルギー が あります', 'I have an allergy.'],
+    ['からい ですか', 'Is it spicy?'],
+    ['とても おいしい です', "It's very delicious!"],
+    ['かんぱい', 'Cheers!'],
+    ['おかいけい おねがいします', 'The bill, please.'],
+    ['カード で はらえますか', 'Can I pay by card?'],
+    ['べつべつ で おねがいします', 'Separate bills, please.'],
+    ['ごちそうさまでした', 'Thank you for the meal.'],
+  ]},
+  { id: 'move', title: 'Getting around', d: 4, items: [
+    ['この でんしゃ は 〜 に いきますか', 'Does this train go to ~?'],
+    ['〜 まで おねがいします', 'To ~, please. (taxi)'],
+    ['つぎ の えき は なん ですか', 'What is the next station?'],
+    ['〜 は なんばんせん ですか', 'Which platform for ~?'],
+    ['のりかえ は どこ ですか', 'Where do I transfer?'],
+    ['しゅうでん は なんじ ですか', 'What time is the last train?'],
+    ['ここ で とめて ください', 'Please stop here. (taxi)'],
+    ['みち に まよいました', "I'm lost."],
+    ['えき は ちかい ですか', 'Is the station close?'],
+    ['あるいて なんぷん ですか', 'How many minutes on foot?'],
+  ]},
+  { id: 'shop', title: 'Shopping', d: 5, items: [
+    ['これ は いくら ですか', 'How much is this?'],
+    ['みて いる だけ です', "I'm just looking."],
+    ['しちゃく しても いいですか', 'May I try it on?'],
+    ['ほか の いろ は ありますか', 'Do you have another color?'],
+    ['もっと ちいさい の は ありますか', 'Do you have a smaller one?'],
+    ['めんぜい できますか', 'Can I buy it tax-free?'],
+    ['ふくろ は いりません', "I don't need a bag."],
+  ]},
+  { id: 'hotel', title: 'Hotel', d: 5, items: [
+    ['チェックイン おねがいします', 'Check-in, please.'],
+    ['よやく して います', 'I have a reservation.'],
+    ['〜 の なまえ で よやく しました', 'I booked under the name ~.'],
+    ['にもつ を あずけても いいですか', 'May I leave my luggage here?'],
+    ['ワイファイ の パスワード は なん ですか', 'What is the Wi-Fi password?'],
+    ['チェックアウト は なんじ ですか', 'What time is check-out?'],
+    ['タオル を もう ひとつ ください', 'One more towel, please.'],
+  ]},
+  { id: 'sight', title: 'Sightseeing', d: 6, items: [
+    ['しゃしん を とって ください', 'Could you take a photo of us?'],
+    ['ここ で しゃしん を とっても いいですか', 'May I take photos here?'],
+    ['にゅうじょうりょう は いくら ですか', 'How much is the entry fee?'],
+    ['すごい です ね', "It's amazing, isn't it?"],
+    ['きれい です ね', "It's beautiful, isn't it?"],
+    ['おすすめ の ばしょ は どこ ですか', 'What place do you recommend?'],
+  ]},
+  { id: 'help', title: 'Emergencies', d: 6, items: [
+    ['たすけて', 'Help!'],
+    ['きゅうきゅうしゃ を よんで ください', 'Please call an ambulance.'],
+    ['けいさつ を よんで ください', 'Please call the police.'],
+    ['びょういん に つれて いって ください', 'Please take me to a hospital.'],
+    ['さいふ を なくしました', 'I lost my wallet.'],
+    ['パスポート を なくしました', 'I lost my passport.'],
+    ['きぶん が わるい です', 'I feel sick.'],
+    ['ここ が いたい です', 'It hurts here.'],
+    ['くすりや は どこ ですか', 'Where is a pharmacy?'],
+  ]},
+  { id: 'two', title: 'Date night', d: 7, items: [
+    ['いっしょに いて たのしい', 'I have fun with you.'],
+    ['きょう は たのしかった ね', 'Today was fun, wasn\'t it?'],
+    ['きれい だ ね', 'You look beautiful.'],
+    ['だいすき だ よ', 'I love you (warm, casual).'],
+    ['また いっしょに きたい ね', "Let's come here together again."],
+    ['いっしょに にほん に こられて うれしい', "I'm so happy we came to Japan together."],
+    ['て を つなごう', "Let's hold hands."],
+    ['ずっと いっしょ に いよう', "Let's always be together."],
+  ]},
+];
+
+const CATS = {
+  greet: 'Greetings & manners', people: 'People & languages', point: 'This, that & question words',
+  num: 'Numbers & counting', time: 'Time', food: 'Food & drink', rest: 'At the restaurant', taste: 'Taste & hunger',
+  trans: 'Trains & transport', place: 'Places in town', dir: 'Directions', verb: 'Verbs (polite ます form)',
+  shop: 'Shopping', hotel: 'Hotel', sight: 'Sightseeing', feel: 'Feelings & descriptions', emerg: 'Health & emergencies', love: 'Date night',
+};
+
+const DAYS = [
+  { t: 'First words',        f: 'Hiragana · greetings · X は Y です · questions with か', kana: ['h'] },
+  { t: 'Numbers & money',    f: 'Hiragana ゛゜ · numbers & counting · ください · いくら', kana: ['h', 'hd'] },
+  { t: 'Food & ordering',    f: 'Katakana · restaurant words · ありますか · にします', kana: ['k'] },
+  { t: 'Getting around',     f: 'Katakana ゛゜ · trains & directions · どこ · verb forms · に / で', kana: ['k', 'kd'] },
+  { t: 'Shopping & hotel',   f: 'Kana combos (きゃ, シュ…) · たい · ても いいですか · ほしい', kana: ['hc', 'kc'] },
+  { t: 'Sights & safety',    f: 'Katakana extras · て ください · ませんか · すき · いたい', kana: ['kx', 'h', 'k'] },
+  { t: 'Review & date night', f: 'Mixed review · build lots of sentences · phrases for two', kana: ['h', 'hd', 'hc', 'k', 'kd', 'kc', 'kx'] },
+];
+
+/* =========================================================================
+   ROMAJI
+   ========================================================================= */
+const KM = {あ:'a',い:'i',う:'u',え:'e',お:'o',か:'ka',き:'ki',く:'ku',け:'ke',こ:'ko',さ:'sa',し:'shi',す:'su',せ:'se',そ:'so',た:'ta',ち:'chi',つ:'tsu',て:'te',と:'to',な:'na',に:'ni',ぬ:'nu',ね:'ne',の:'no',は:'ha',ひ:'hi',ふ:'fu',へ:'he',ほ:'ho',ま:'ma',み:'mi',む:'mu',め:'me',も:'mo',や:'ya',ゆ:'yu',よ:'yo',ら:'ra',り:'ri',る:'ru',れ:'re',ろ:'ro',わ:'wa',を:'o',が:'ga',ぎ:'gi',ぐ:'gu',げ:'ge',ご:'go',ざ:'za',じ:'ji',ず:'zu',ぜ:'ze',ぞ:'zo',だ:'da',ぢ:'ji',づ:'zu',で:'de',ど:'do',ば:'ba',び:'bi',ぶ:'bu',べ:'be',ぼ:'bo',ぱ:'pa',ぴ:'pi',ぷ:'pu',ぺ:'pe',ぽ:'po',ぁ:'a',ぃ:'i',ぅ:'u',ぇ:'e',ぉ:'o',ゔ:'vu'};
+const SMALL_Y = {ゃ:'a', ゅ:'u', ょ:'o'};
+const SMALL_V = {ぁ:'a', ぃ:'i', ぅ:'u', ぇ:'e', ぉ:'o'};
+const CONS = {し:'sh', ち:'ch', じ:'j', ぢ:'j', ふ:'f', う:'w', ゔ:'v', つ:'ts'};
+const ROMA_EXC = {'こんにちは': 'konnichiwa', 'こんばんは': 'konbanwa'};
+const toHira = s => s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+const toKata = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+
+function romajiRaw(w) {
+  const s = toHira(w), parts = [];
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i], n = s[i + 1];
+    if (c === 'っ' || c === 'ー' || c === 'ん') { parts.push(c); continue; }
+    const r = KM[c];
+    if (r === undefined) { parts.push(c === '、' ? ',' : c === '。' ? '.' : c === '〜' ? '~' : c); continue; }
+    if (n && SMALL_Y[n] && 'きしちにひみりぎじびぴぢ'.includes(c)) { parts.push(({し:'sh',ち:'ch',じ:'j',ぢ:'j'}[c] || r.slice(0, -1) + 'y') + SMALL_Y[n]); i++; continue; }
+    if (n && SMALL_V[n] && 'ふてでうしじちゔとつ'.includes(c)) { parts.push((CONS[c] || r.slice(0, -1)) + SMALL_V[n]); i++; continue; }
+    parts.push(r);
+  }
+  let out = '';
+  for (let i = 0; i < parts.length; i++) {
+    const p = parts[i], nx = parts[i + 1] || '';
+    if (p === 'っ') out += /^[a-z]/.test(nx) ? (nx.startsWith('ch') ? 't' : nx[0]) : '';
+    else if (p === 'ー') { const last = out.slice(-1); out += 'aeiou'.includes(last) ? last : '-'; }
+    else if (p === 'ん') out += /^[aeiouy]/.test(nx) ? "n'" : 'n';
+    else out += p;
+  }
+  return out;
+}
+function romajiWord(w) {
+  if (ROMA_EXC[w]) return ROMA_EXC[w];
+  if (w === 'は') return 'wa';
+  if (w === 'へ') return 'e';
+  return romajiRaw(w);
+}
+const romaji = text => text.split(/\s+/).filter(Boolean).map(romajiWord).join(' ');
+
+/* =========================================================================
+   DATA SETUP
+   ========================================================================= */
+function hash(s) { let x = 2166136261; for (const ch of s) { x ^= ch.codePointAt(0); x = Math.imul(x, 16777619) >>> 0; } return x.toString(36); }
+const lines = raw => raw.trim().split('\n').map(l => l.split('|'));
+const VOCAB = lines(VOCAB_RAW).map(([d, c, r, k, e]) => ({ d: +d, c, r, k, e }));
+const VERBS = lines(VERBS_RAW).map(([d, m, k, te, base, past]) => ({ d: +d, m, k, te, base, past }));
+const TE = Object.fromEntries(VERBS.map(v => [v.m, v.te]));
+// Reading units: a kana plus any small ゃゅょ/ぁぃぅぇぉ after it (しゃ, ティ) count as one sound.
+const SMALLS = 'ゃゅょぁぃぅぇぉャュョァィゥェォ';
+const kanaUnits = w => { const u = []; for (const c of w) { if (SMALLS.includes(c) && u.length) u[u.length - 1] += c; else u.push(c); } return u; };
+const READ_WORDS = (() => {
+  const seen = new Set(), out = [];
+  for (const [jp, en] of [...lines(READ_EXTRA_RAW), ...VOCAB.map(w => [w.r, w.e]), ...VERBS.map(v => [v.m, 'to ' + v.base])]) {
+    if (/[\s〜\/A-Za-z]/.test(jp) || seen.has(jp)) continue;
+    seen.add(jp); out.push({ jp, en, u: kanaUnits(jp) });
+  }
+  return out;
+})();
+
+const CARDS = [];
+VOCAB.forEach(w => CARDS.push({ id: 'w' + hash(w.r + '|' + w.e), kind: 'word', jp: w.r, k: w.k, en: w.e, day: w.d, cat: w.c }));
+VERBS.forEach(v => CARDS.push({ id: 'v' + hash(v.m + '|' + v.base), kind: 'word', jp: v.m, k: v.k, en: 'to ' + v.base, day: v.d, cat: 'verb', extra: 'て-form: ' + v.te + '  ·  past: ' + v.m.slice(0, -2) + 'ました' }));
+PHRASES.forEach(sec => sec.items.forEach(([jp, en]) => CARDS.push({ id: 'p' + hash(jp + '|' + en), kind: 'phrase', jp, en, day: sec.d, cat: sec.id })));
+
+/* ---------- Pattern generator pools ---------- */
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const stem = m => m.slice(0, -2);
+const sent = (...parts) => parts.filter(Boolean).join(' ').replace(/\s+([.?!,])/g, '$1');
+
+// [X, Y, type n|i|na, statement, question, negative]
+const DESC = [
+  ['これ', 'すし', 'n', 'This is sushi.', 'Is this sushi?', "This isn't sushi."],
+  ['これ', 'おちゃ', 'n', 'This is green tea.', 'Is this green tea?', "This isn't green tea."],
+  ['それ', 'ビール', 'n', 'That is beer.', 'Is that beer?', "That isn't beer."],
+  ['ここ', 'えき', 'n', 'This is the station.', 'Is this the station?', "This isn't the station."],
+  ['あれ', 'ふじさん', 'n', 'That over there is Mt. Fuji.', 'Is that Mt. Fuji over there?', "That isn't Mt. Fuji."],
+  ['かのじょ', 'スペインじん', 'n', 'She is Spanish.', 'Is she Spanish?', "She isn't Spanish."],
+  ['わたし', 'かんこうきゃく', 'n', 'I am a tourist.', 'Am I a tourist?', "I'm not a tourist."],
+  ['ラーメン', 'おいしい', 'i', 'Ramen is delicious.', 'Is ramen delicious?', "Ramen isn't delicious."],
+  ['ホテル', 'ちかい', 'i', 'The hotel is close.', 'Is the hotel close?', "The hotel isn't close."],
+  ['きっぷ', 'たかい', 'i', 'The ticket is expensive.', 'Is the ticket expensive?', "The ticket isn't expensive."],
+  ['えき', 'とおい', 'i', 'The station is far.', 'Is the station far?', "The station isn't far."],
+  ['きょう', 'さむい', 'i', 'Today is cold.', 'Is it cold today?', "It isn't cold today."],
+  ['これ', 'かわいい', 'i', 'This is cute.', 'Is this cute?', "This isn't cute."],
+  ['にほん', 'きれい', 'na', 'Japan is beautiful.', 'Is Japan beautiful?', "Japan isn't beautiful."],
+  ['こうえん', 'しずか', 'na', 'The park is quiet.', 'Is the park quiet?', "The park isn't quiet."],
+];
+const NO = [['わたし','パスポート','my passport'],['わたし','にもつ','my luggage'],['わたし','かのじょ','my girlfriend'],['わたし','きっぷ','my ticket'],['かのじょ','さいふ','her wallet'],['にほん','おさけ','Japanese sake'],['えいご','メニュー','the English menu'],['ホテル','かぎ','the hotel key'],['えき','ちず','a map of the station']];
+const THINGS = [['これ','This one'],['みず','Water'],['おちゃ','Green tea'],['コーヒー','A coffee'],['メニュー','The menu'],['おかいけい','The bill'],['はし','Chopsticks'],['ふくろ','A bag'],['レシート','A receipt'],['ちず','A map'],['きっぷ','A ticket']];
+const COUNTABLE = [['ビール','beers'],['コーヒー','coffees'],['ラーメン','bowls of ramen'],['きっぷ','tickets'],['みず','glasses of water']];
+const NUMS = [['ふたつ','Two'],['みっつ','Three'],['よっつ','Four']];
+const PRICE = [['これ','this'],['それ','that'],['あれ','that one over there'],['きっぷ','the ticket'],['へや','the room'],['にゅうじょうりょう','the entry fee'],['ラーメン','the ramen'],['おみやげ','the souvenir'],['ぜんぶ','everything']];
+const ARU = [['ワイファイ','Wi-Fi'],['えいご の メニュー','an English menu'],['ちず','a map'],['タオル','a towel'],['ふくろ','a bag'],['せき','a table free'],['へや','a room free'],['ベジタリアン の メニュー','a vegetarian menu']];
+const CHOOSE = [['これ',"I'll have this."],['ラーメン',"I'll have the ramen."],['すし',"I'll have the sushi."],['カレー',"I'll have the curry."],['とんかつ',"I'll have the tonkatsu."],['うどん',"I'll have the udon."],['ビール',"I'll have a beer."],['おすすめ',"I'll have your recommendation."]];
+const PLACES = [['えき','the station'],['トイレ','the toilet'],['ホテル','the hotel'],['くうこう','the airport'],['コンビニ','a convenience store'],['ぎんこう','the bank'],['でぐち','the exit'],['いりぐち','the entrance'],['のりば','the boarding area'],['きっぷうりば','the ticket office'],['こうばん','the police box'],['くすりや','the pharmacy'],['じんじゃ','the shrine'],['おてら','the temple'],['こうえん','the park'],['びじゅつかん','the art museum']];
+const TRANS = [['でんしゃ','train'],['バス','bus'],['タクシー','taxi'],['ちかてつ','subway'],['しんかんせん','bullet train']];
+// [prefix (object + particle), verb ます form, en base, en past, en rest, tags: t=たい m=ませんか y=ても k=てください]
+const ACTIONS = [
+  ['すし を','たべます','eat','ate','sushi','tm'],
+  ['ラーメン を','たべます','eat','ate','ramen','tm'],
+  ['ばんごはん を','たべます','eat','ate','dinner','tm'],
+  ['ビール を','のみます','drink','drank','beer','tm'],
+  ['おさけ を','のみます','drink','drank','sake','tm'],
+  ['おみやげ を','かいます','buy','bought','souvenirs','tm'],
+  ['きっぷ を','かいます','buy','bought','a ticket','t'],
+  ['こうよう を','みます','see','saw','the autumn leaves','tm'],
+  ['ふじさん を','みます','see','saw','Mt. Fuji','tm'],
+  ['しゃしん を','とります','take','took','a photo','tkm'],
+  ['おんせん に','いきます','go','went','to a hot spring','tm'],
+  ['じんじゃ に','いきます','go','went','to a shrine','tm'],
+  ['でんしゃ に','のります','get on','got on','the train','t'],
+  ['ホテル に','かえります','go back','went back','to the hotel','tm'],
+  ['にほんご を','はなします','speak','spoke','Japanese','tm'],
+  ['すこし','やすみます','rest','rested','a little','tm'],
+  ['こうえん を','あるきます','walk','walked','in the park','m'],
+  ['カード で','はらいます','pay','paid','by card','ty'],
+  ['にもつ を','あずけます','leave','left','my luggage here','y'],
+  ['ここ で','まちます','wait','waited','here','yk'],
+  ['えいご で','はなします','speak','spoke','in English','yk'],
+  ['ゆっくり','はなします','speak','spoke','slowly','k'],
+  ['ちず を','かきます','draw','drew','me a map','k'],
+  ['タクシー を','よびます','call','called','a taxi','k'],
+  ['パスワード を','おしえます','tell','told','me the password','k'],
+  ['これ を','つかいます','use','used','this','y'],
+  ['ここ で しゃしん を','とります','take','took','photos here','y'],
+  ['もう いちど','いいます','say','said','it once more','k'],
+  ['ここ に','かきます','write','wrote','it here','k'],
+].map(([pre, m, base, past, rest, tags]) => ({ pre, m, base, past, rest, tags }));
+const act = tag => pick(ACTIONS.filter(a => a.tags.includes(tag)));
+const HOURS = [['いちじ',1],['にじ',2],['さんじ',3],['よじ',4],['ごじ',5],['ろくじ',6],['しちじ',7],['はちじ',8],['くじ',9],['じゅうじ',10],['じゅういちじ',11],['じゅうにじ',12]];
+const TIMEV = [['おきます','I get up'],['ねます','I go to bed'],['つきます','I arrive'],['かえります','I go back']];
+const HOSHII = [['おみやげ','souvenirs'],['みず','some water'],['ちず','a map'],['あたらしい スマホ','a new smartphone'],['ふくろ','a bag'],['おちゃ','some green tea']];
+const SUKI = [['すし','sushi'],['ラーメン','ramen'],['にほん','Japan'],['おんせん','hot springs'],['ビール','beer'],['コーヒー','coffee'],['こうよう','autumn leaves'],['おさけ','sake']];
+const BODY = [['あたま','I have a headache.'],['おなか','I have a stomachache.'],['あし','My feet hurt.'],['のど','I have a sore throat.'],['ここ','It hurts here.']];
+
+const PATTERNS = [
+  { id: 'desu', day: 1, title: 'X は Y です', meaning: 'X is Y',
+    formula: [['n','X'],['p','は'],['n','Y'],['f','です']],
+    notes: ['は marks the topic: what you are talking about. As a particle it is pronounced "wa", not "ha".', 'です ends a polite sentence, like "is / am / are". Japanese has no "a / the" and no plural forms.', 'Y can be a noun (すし) or an adjective (おいしい, きれい).'],
+    examples: [['わたし は スペインじん です','I am Spanish.'],['これ は おちゃ です','This is green tea.'],['ラーメン は おいしい です','Ramen is delicious.']],
+    gen: () => { const d = pick(DESC); return [`${d[0]} は ${d[1]} です`, d[3]]; } },
+  { id: 'ka', day: 1, title: '… ですか', meaning: 'Turn any sentence into a question',
+    formula: [['n','X'],['p','は'],['n','Y'],['f','です'],['p','か']],
+    notes: ['Add か to the end of a sentence and it becomes a question. The word order does not change.', 'Answer with はい (yes) or いいえ (no).', 'Question words go where the answer would be: これ は なん ですか = "What is this?"'],
+    examples: [['これ は すし ですか','Is this sushi?'],['トイレ は どこ ですか','Where is the toilet?'],['これ は なん ですか','What is this?']],
+    gen: () => { const d = pick(DESC); return [`${d[0]} は ${d[1]} ですか`, d[4]]; } },
+  { id: 'neg', day: 1, title: 'X は Y じゃないです', meaning: 'X is not Y',
+    formula: [['n','X'],['p','は'],['n','Y'],['f','じゃないです']],
+    notes: ['Nouns and な-adjectives (きれい, しずか): replace です with じゃないです.', 'い-adjectives (たかい, おいしい): drop the final い and add くないです. たかい → たかくないです.', 'One exception: いい (good) → よくないです.'],
+    examples: [['これ は ビール じゃないです',"This isn't beer."],['きっぷ は たかくないです',"The ticket isn't expensive."]],
+    gen: () => { const d = pick(DESC); return [d[2] === 'i' ? `${d[0]} は ${d[1].slice(0, -1)}くないです` : `${d[0]} は ${d[1]} じゃないです`, d[5]]; } },
+  { id: 'no', day: 1, title: 'X の Y', meaning: "X's Y / the Y of X",
+    formula: [['n','X'],['p','の'],['n','Y']],
+    notes: ['の links two nouns. The first one owns or describes the second.', 'わたし の = my, かのじょ の = her. It also works for places and languages: えき の でぐち (the station exit), えいご の メニュー (the English menu).'],
+    examples: [['これ は わたし の パスポート です','This is my passport.'],['えいご の メニュー は ありますか','Do you have an English menu?']],
+    gen: () => { const [x, y, en] = pick(NO); return [`これ は ${x} の ${y} です`, `This is ${en}.`]; } },
+  { id: 'kudasai', day: 2, title: 'X を ください', meaning: 'X, please (ordering or buying)',
+    formula: [['n','X'],['p','を'],['n','number'],['f','ください']],
+    notes: ['を marks the object: the thing you want.', 'Put a quantity right before ください: みず を ふたつ ください = "Two waters, please."', 'Counting things: ひとつ, ふたつ, みっつ, よっつ, いつつ. Counting people: ひとり, ふたり.', 'Shorter and still polite: これ、おねがいします.'],
+    examples: [['これ を ください','This one, please.'],['ビール を ふたつ ください','Two beers, please.']],
+    gen: () => { if (Math.random() < .5) { const [x, en] = pick(COUNTABLE), [n, N] = pick(NUMS); return [`${x} を ${n} ください`, `${N} ${en}, please.`]; } const [x, en] = pick(THINGS); return [`${x} を ください`, `${en}, please.`]; } },
+  { id: 'ikura', day: 2, title: 'X は いくら ですか', meaning: 'How much is X?',
+    formula: [['n','X'],['p','は'],['f','いくら'],['f','ですか']],
+    notes: ['いくら = how much. Prices are number + えん (円). 1,500 = せん ごひゃく えん.', 'Big numbers group by 10,000 (まん): 10,000 = いちまん, 30,000 = さんまん.', 'Sound changes to recognise: 300 さんびゃく, 600 ろっぴゃく, 800 はっぴゃく, 3,000 さんぜん, 8,000 はっせん.'],
+    examples: [['これ は いくら ですか','How much is this?'],['ぜんぶ で いくら ですか','How much is it all together?']],
+    gen: () => { const [x, en] = pick(PRICE); return [`${x} は いくら ですか`, `How much is ${en}?`]; } },
+  { id: 'aru', day: 3, title: 'X は ありますか', meaning: 'Do you have X? / Is there X?',
+    formula: [['n','X'],['p','は'],['v','あります'],['p','か']],
+    notes: ['あります = "there is / to have" for things. For people and animals use います.', 'Answers: はい、あります (yes, we have) / いいえ、ありません (no, we don\'t).', 'Negative of any ます verb: ます → ません.'],
+    examples: [['えいご の メニュー は ありますか','Do you have an English menu?'],['ワイファイ は ありますか','Is there Wi-Fi?']],
+    gen: () => { const [x, en] = pick(ARU); return [`${x} は ありますか`, `Do you have ${en}?`]; } },
+  { id: 'nishimasu', day: 3, title: 'X に します', meaning: "I'll have X (choosing)",
+    formula: [['n','X'],['p','に'],['v','します']],
+    notes: ['Use it when you pick something from a menu or a list of options.', 'に marks the choice; します = "do / make".', 'Combine with a number: ラーメン に します。ふたつ おねがいします.'],
+    examples: [['これ に します',"I'll have this."],['てんぷら に します',"I'll have the tempura."]],
+    gen: () => { const [x, en] = pick(CHOOSE); return [`${x} に します`, en]; } },
+  { id: 'doko', day: 4, title: 'X は どこ ですか', meaning: 'Where is X?',
+    formula: [['n','X'],['p','は'],['f','どこ'],['f','ですか']],
+    notes: ['どこ = where. Same shape as X は Y です with どこ in the Y slot.', 'Answers you may hear: あそこ です (over there), みぎ (right), ひだり (left), まっすぐ (straight on).', 'Start with すみません to get someone\'s attention politely.'],
+    examples: [['すみません、 えき は どこ ですか','Excuse me, where is the station?']],
+    gen: () => { const [x, en] = pick(PLACES); return [`${x} は どこ ですか`, `Where is ${en}?`]; } },
+  { id: 'iku', day: 4, title: 'X に Y で いきます', meaning: 'I go to X by Y',
+    formula: [['n','place'],['p','に'],['n','vehicle'],['p','で'],['v','いきます']],
+    notes: ['に after a place = "to" (the destination). へ (said "e") also works.', 'で after a vehicle = "by / using". でんしゃ で = by train. On foot is あるいて.', 'Works the same with きます (come) and かえります (go back).'],
+    examples: [['くうこう に でんしゃ で いきます',"I'll go to the airport by train."],['ホテル に かえります',"I'm going back to the hotel."]],
+    gen: () => { const [x, en] = pick(PLACES.slice(2)); if (Math.random() < .55) { const [t, ten] = pick(TRANS); return [`${x} に ${t} で いきます`, `I'm going to ${en} by ${ten}.`]; } return [`${x} に いきます`, `I'm going to ${en}.`]; } },
+  { id: 'forms', day: 4, title: 'V-ます / ません / ました', meaning: 'Polite verb endings: do, don\'t, did, didn\'t',
+    formula: [['n','X'],['p','を'],['v','stem'],['f','ます · ません · ました']],
+    notes: ['All verbs here are in the polite ます form. Only the ending changes:', 'ます = do / will do · ません = don\'t / won\'t · ました = did · ませんでした = didn\'t.', 'Add か for a question: いきますか = "Are you going?"', 'The verb always comes last. The object takes を: すし を たべます.'],
+    examples: [['すし を たべました','I ate sushi.'],['きょう は いきません',"I'm not going today."]],
+    gen: () => { const a = pick(ACTIONS.filter(a => /[tm]/.test(a.tags))); const s = stem(a.m); const f = pick([
+      [s + 'ます', `I ${a.base} ${a.rest}.`], [s + 'ません', `I don't ${a.base} ${a.rest}.`], [s + 'ました', `I ${a.past} ${a.rest}.`],
+      [s + 'ませんでした', `I didn't ${a.base} ${a.rest}.`], [s + 'ますか', `Do you ${a.base} ${a.rest}?`]]);
+      return [sent(a.pre, f[0]), f[1]]; } },
+  { id: 'time', day: 4, title: 'Time に V-ます', meaning: 'At (time), I do V',
+    formula: [['n','time'],['p','に'],['v','V-ます']],
+    notes: ['に after a clock time = "at". ろくじ に = at 6:00.', 'Hours are number + じ. Irregular ones: よじ (4), しちじ (7), くじ (9).', 'Half past = はん: ろくじ はん = 6:30. Put ごぜん (a.m.) or ごご (p.m.) in front if needed.'],
+    examples: [['しちじ に おきます','I get up at 7.'],['ごご さんじ に つきます','I arrive at 3 p.m.']],
+    gen: () => { const [h, n] = pick(HOURS), [v, en] = pick(TIMEV), half = Math.random() < .3; return [sent(h, half ? 'はん' : '', 'に', v), `${en} at ${n}:${half ? '30' : '00'}.`]; } },
+  { id: 'tai', day: 5, title: 'X を V-たい です', meaning: 'I want to V (X)',
+    formula: [['n','X'],['p','を'],['v','stem'],['f','たい'],['f','です']],
+    notes: ['Take the ます form, drop ます, add たい です: たべます → たべたい です.', 'Don\'t want to: たくない です. たべたくない です = I don\'t want to eat.', 'Asking a stranger what they want is a little direct, but with your travel partner it is perfectly natural: なに を たべたい?'],
+    examples: [['すし を たべたい です','I want to eat sushi.'],['ふじさん を みたい です','I want to see Mt. Fuji.']],
+    gen: () => { const a = act('t'); return [sent(a.pre, stem(a.m) + 'たい', 'です'), `I want to ${a.base} ${a.rest}.`]; } },
+  { id: 'temo', day: 5, title: 'V-ても いいですか', meaning: 'May I V?',
+    formula: [['n','X'],['p','を'],['v','て-form'],['f','も'],['f','いいですか']],
+    notes: ['Take the て-form of the verb (every verb card shows it) and add も いいですか.', 'とります → とって → とっても いいですか.', 'Answers: はい、どうぞ (yes, go ahead) / すみません、ちょっと… (sorry, that\'s a bit… = no).'],
+    examples: [['しゃしん を とっても いいですか','May I take a photo?'],['カード で はらっても いいですか','May I pay by card?']],
+    gen: () => { const a = act('y'); return [sent(a.pre, TE[a.m] + 'も', 'いいですか'), `May I ${a.base} ${a.rest}?`]; } },
+  { id: 'hoshii', day: 5, title: 'X が ほしい です', meaning: 'I want (a thing)',
+    formula: [['n','X'],['p','が'],['f','ほしい'],['f','です']],
+    notes: ['ほしい is for wanting things. To want to DO something, use たい.', 'The thing you want takes が, not を.', 'In a shop, X を ください is the more polite way to ask for it.'],
+    examples: [['あたらしい スマホ が ほしい です','I want a new smartphone.']],
+    gen: () => { const [x, en] = pick(HOSHII); return [`${x} が ほしい です`, `I want ${en}.`]; } },
+  { id: 'tekudasai', day: 6, title: 'V-て ください', meaning: 'Please V (asking someone to do something)',
+    formula: [['n','X'],['p','を'],['v','て-form'],['f','ください']],
+    notes: ['て-form + ください = a polite request.', 'Making the て-form from ます: 〜います / 〜ちます / 〜ります → 〜って · 〜みます / 〜びます → 〜んで · 〜きます → 〜いて · 〜します → 〜して · most 〜えます verbs and みます → drop ます, add て. Exception: いきます → いって.', 'No need to memorise the rule this week: the て-form is printed on every verb card.'],
+    examples: [['ゆっくり はなして ください','Please speak slowly.'],['しゃしん を とって ください','Could you take a photo of us?']],
+    gen: () => { const a = act('k'); return [sent(a.pre, TE[a.m], 'ください'), `Please ${a.base} ${a.rest}.`]; } },
+  { id: 'masenka', day: 6, title: 'いっしょに V-ませんか', meaning: 'Shall we V together? / Let\'s V',
+    formula: [['f','いっしょに'],['n','X'],['p','を'],['v','stem'],['f','ませんか / ましょう']],
+    notes: ['ませんか (literally "won\'t you?") is a soft, polite invitation.', 'ましょう = "let\'s". いきましょう = let\'s go!', 'いっしょに = together. Handy when you travel with someone.'],
+    examples: [['いっしょに ラーメン を たべませんか','Shall we eat ramen together?'],['いきましょう',"Let's go!"]],
+    gen: () => { const a = act('m'); return Math.random() < .5
+      ? [sent('いっしょに', a.pre, stem(a.m) + 'ませんか'), `Shall we ${a.base} ${a.rest} together?`]
+      : [sent('いっしょに', a.pre, stem(a.m) + 'ましょう'), `Let's ${a.base} ${a.rest} together!`]; } },
+  { id: 'suki', day: 6, title: 'X が すき です', meaning: 'I like X',
+    formula: [['n','X'],['p','が'],['f','すき'],['f','です']],
+    notes: ['すき = liked. The thing you like takes が.', 'だいすき = love / like a lot. ちょっと にがて です = not really my thing (a polite dislike).', 'Question: X が すき ですか = Do you like X?'],
+    examples: [['にほん が だいすき です','I love Japan.'],['おんせん が すき ですか','Do you like hot springs?']],
+    gen: () => { const [x, en] = pick(SUKI); return pick([[`${x} が すき です`, `I like ${en}.`], [`${x} が だいすき です`, `I love ${en}.`], [`${x} が すき ですか`, `Do you like ${en}?`]]); } },
+  { id: 'itai', day: 6, title: 'X が いたい です', meaning: 'My X hurts',
+    formula: [['n','body part'],['p','が'],['f','いたい'],['f','です']],
+    notes: ['いたい = painful. Point and say ここ が いたい です (it hurts here).', 'For feeling ill in general: きぶん が わるい です.', 'If it is serious: きゅうきゅうしゃ を よんで ください (please call an ambulance).'],
+    examples: [['あたま が いたい です','I have a headache.']],
+    gen: () => { const [x, en] = pick(BODY); return [`${x} が いたい です`, en]; } },
+];
+const PMAP = Object.fromEntries(PATTERNS.map(p => [p.id, p]));
+
+/* ---------- Kana sets ---------- */
+const rowsOf = arr => arr.map(r => (typeof r === 'string' ? r.split('') : r).map(c => (c === '_' ? null : c)));
+const H_BASIC = rowsOf(['あいうえお','かきくけこ','さしすせそ','たちつてと','なにぬねの','はひふへほ','まみむめも','や_ゆ_よ','らりるれろ','わ___を','ん____']);
+const H_DAK = rowsOf(['がぎぐげご','ざじずぜぞ','だぢづでど','ばびぶべぼ','ぱぴぷぺぽ']);
+const H_COMBO = 'きしちにひみりぎじびぴ'.split('').map(c => [c + 'ゃ', c + 'ゅ', c + 'ょ']);
+const kataRows = rows => rows.map(r => r.map(c => c && toKata(c)));
+const K_EXTRA = [['ファ','フィ','フェ','フォ'],['ティ','ディ','トゥ',null],['ウィ','ウェ','ウォ',null],['シェ','ジェ','チェ','ヴ']];
+const KSETS = [
+  { id: 'h', name: 'Hiragana', rows: H_BASIC, cols: 5 },
+  { id: 'hd', name: 'Hiragana ゛゜', rows: H_DAK, cols: 5 },
+  { id: 'hc', name: 'Hiragana combos', rows: H_COMBO, cols: 3 },
+  { id: 'k', name: 'Katakana', rows: kataRows(H_BASIC), cols: 5 },
+  { id: 'kd', name: 'Katakana ゛゜', rows: kataRows(H_DAK), cols: 5 },
+  { id: 'kc', name: 'Katakana combos', rows: kataRows(H_COMBO), cols: 3 },
+  { id: 'kx', name: 'Katakana extras', rows: K_EXTRA, cols: 4 },
+];
+const kanaLabel = ch => (ch === 'を' || ch === 'ヲ') ? 'wo' : romajiRaw(ch);
+const KALT = { shi:['si'], chi:['ti'], tsu:['tu'], fu:['hu'], ji:['zi','di'], wo:['o'], n:['nn'], sha:['sya'], shu:['syu'], sho:['syo'], cha:['tya','cya'], chu:['tyu','cyu'], cho:['tyo','cyo'], ja:['zya','jya'], ju:['zyu','jyu'], jo:['zyo','jyo'], zu:['du'] };
+const QUIZ_EXCLUDE = new Set(['ぢ','づ','ヂ','ヅ']);
+const kanaKey = ch => 'k' + [...ch].map(c => c.codePointAt(0).toString(36)).join('');
+const setItems = id => KSETS.find(s => s.id === id).rows.flat().filter(Boolean);
+const TOTAL_KANA = KSETS.reduce((n, s) => n + setItems(s.id).length, 0);
+
+/* =========================================================================
+   STATE & SYNC
+   ========================================================================= */
+const LS = 'tabi-nihongo-v1';
+const DAY_MS = 864e5, MIN = 6e4;
+const pad = n => String(n).padStart(2, '0');
+const dateStr = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => dateStr(new Date());
+const parseDate = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const daysBetween = (a, b) => Math.round((parseDate(b) - parseDate(a)) / DAY_MS);
+const addDays = (s, n) => { const d = parseDate(s); d.setDate(d.getDate() + n); return dateStr(d); };
+
+function freshState() {
+  const t = today();
+  return { v: 1, srs: {}, kana: {}, act: {}, built: { n: 0, ok: 0 }, settings: { romaji: true, autoplay: true, rate: 0.85, batch: 20 }, settingsT: 0, start: t, manualDay: 1, trip: addDays(t, 7), resetAt: 0 };
+}
+let state = freshState();
+try { const raw = localStorage.getItem(LS); if (raw) state = Object.assign(freshState(), JSON.parse(raw)); } catch (e) {}
+
+function mergeStates(a, b) {
+  const r = JSON.parse(JSON.stringify(a));
+  const cut = Math.max(a.resetAt || 0, b.resetAt || 0);
+  r.resetAt = cut;
+  for (const key of ['srs', 'kana']) {
+    const out = {};
+    for (const src of [a[key] || {}, b[key] || {}]) for (const [k, v] of Object.entries(src)) {
+      if ((v.t || 0) < cut) continue;
+      if (!out[k] || (v.t || 0) > (out[k].t || 0)) out[k] = v;
+    }
+    r[key] = out;
+  }
+  const bFresh = (b.resetAt || 0) >= cut, aFresh = (a.resetAt || 0) >= cut;
+  r.act = {}; r.built = { n: 0, ok: 0 };
+  for (const [src, fresh] of [[a, aFresh], [b, bFresh]]) {
+    if (!fresh) continue;
+    for (const [k, v] of Object.entries(src.act || {})) r.act[k] = Math.max(r.act[k] || 0, v);
+    r.built.n = Math.max(r.built.n, src.built?.n || 0); r.built.ok = Math.max(r.built.ok, src.built?.ok || 0);
+  }
+  if ((b.settingsT || 0) > (a.settingsT || 0)) {
+    Object.assign(r, { settings: { ...a.settings, ...b.settings }, settingsT: b.settingsT, start: b.start, manualDay: b.manualDay, trip: b.trip });
+  } else if ((b.settingsT || 0) === (a.settingsT || 0)) {
+    if (b.start && b.start < r.start) { r.start = b.start; r.trip = b.trip || r.trip; }
+    r.manualDay = Math.max(a.manualDay || 1, b.manualDay || 1);
+  }
+  return r;
+}
+
+let remote = null, writing = false, dirty = false, timer = null, syncState = 'local';
+function persistLocal() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+function save() { persistLocal(); if (remote) { dirty = true; clearTimeout(timer); timer = setTimeout(flush, 2000); } }
+async function flush() {
+  if (!remote || writing || !dirty) return;
+  writing = true; dirty = false;
+  try { await remote.set(JSON.parse(JSON.stringify(state))); syncState = 'synced'; }
+  catch (e) { syncState = 'error'; dirty = true; }
+  writing = false;
+  if (dirty && syncState !== 'error') flush();
+}
+async function pullRemote() {
+  if (!remote) return;
+  try {
+    const snap = await remote.get();
+    if (snap.exists) {
+      const before = JSON.stringify(state);
+      state = mergeStates(state, snap.data());
+      persistLocal();
+      if (JSON.stringify(state) !== before) render();
+      if (JSON.stringify(state) !== JSON.stringify(snap.data())) { dirty = true; flush(); }
+    } else { dirty = true; flush(); }
+    syncState = 'synced';
+  } catch (e) { syncState = 'error'; }
+}
+async function initSync() {
+  try {
+    if (!window.claude?.use) return;
+    const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+    if (!db || !user) return;
+    const uid = await user.id();
+    if (!uid) return;
+    remote = db.doc('data/users/' + uid + '/progress');
+    await pullRemote();
+  } catch (e) { remote = null; syncState = 'local'; }
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') pullRemote(); else flush(); });
+
+/* ---------- derived ---------- */
+function unlockedDay() { const auto = daysBetween(state.start, today()) + 1; return Math.max(1, Math.min(7, Math.max(auto, state.manualDay || 1))); }
+function bumpAct() { const t = today(); state.act[t] = (state.act[t] || 0) + 1; }
+function streak() { let n = 0, d = today(); if (!state.act[d]) d = addDays(d, -1); while (state.act[d]) { n++; d = addDays(d, -1); } return n; }
+const kanaStat = ch => state.kana[kanaKey(ch)];
+const kanaLevel = ch => { const s = kanaStat(ch); return !s ? 0 : s.s >= 3 ? 2 : 1; };
+function kanaMastered(ids) { let m = 0, t = 0; ids.forEach(id => setItems(id).forEach(ch => { t++; if (kanaLevel(ch) === 2) m++; })); return [m, t]; }
+const srsKey = (c, dir) => c.id + '_' + dir;
+const learnedCount = () => CARDS.filter(c => (state.srs[srsKey(c, 'r')]?.b || 0) >= 3).length;
+function dueCount() { const now = Date.now(), d = unlockedDay(); let n = 0; for (const c of CARDS) { if (c.day > d) continue; for (const dir of ['r', 'p']) { const s = state.srs[srsKey(c, dir)]; if (s && s.due <= now) n++; } } return n; }
+
+/* =========================================================================
+   SPEECH
+   ========================================================================= */
+// Neural recordings (ja-JP Nanami) ship as audio/*.json packs: { cleanedText: base64 Ogg Opus }.
+// Anything missing from the packs falls back to the device's own speech engine.
+const AUDIO = {}, AUDIO_URLS = {}, PACKS = ['kana', 'words', 'sentences'];
+let packsLoading = null, packsLoaded = 0, curAudio = null;
+function loadPacks() {
+  if (packsLoading) return packsLoading;
+  packsLoading = Promise.all(PACKS.map(p => fetch('audio/' + p + '.json').then(r => r.ok ? r.json() : {}).then(d => { Object.assign(AUDIO, d); packsLoaded++; }).catch(() => {})));
+  return packsLoading;
+}
+const cleanSpeech = text => text.replace(/〜/g, '').replace(/\s*\/\s*/g, '、').replace(/\s+/g, '');
+function clipUrl(key) {
+  if (AUDIO_URLS[key]) return AUDIO_URLS[key];
+  const b = atob(AUDIO[key]), u8 = new Uint8Array(b.length);
+  for (let i = 0; i < b.length; i++) u8[i] = b.charCodeAt(i);
+  return (AUDIO_URLS[key] = URL.createObjectURL(new Blob([u8], { type: 'audio/ogg' })));
+}
+let jaVoice = null;
+function loadVoices() {
+  try {
+    const vs = speechSynthesis.getVoices().filter(v => /^ja/i.test(v.lang));
+    jaVoice = vs.find(v => /natural|online|neural|nanami|google/i.test(v.name)) || vs.find(v => /kyoko|otoya|haruka/i.test(v.name)) || vs[0] || null;
+  } catch (e) {}
+}
+if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function deviceSpeak(clean) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(clean);
+    u.lang = 'ja-JP'; if (jaVoice) u.voice = jaVoice; u.rate = state.settings.rate || 0.85;
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+async function speak(text) {
+  const key = cleanSpeech(text);
+  if (!AUDIO[key] && packsLoaded < PACKS.length) await loadPacks();
+  if (!AUDIO[key]) return deviceSpeak(key);
+  try {
+    if (curAudio) curAudio.pause();
+    try { speechSynthesis.cancel(); } catch (e) {}
+    const r = state.settings.rate || 0.85;
+    curAudio = new Audio(clipUrl(key));
+    curAudio.playbackRate = r <= 0.7 ? 0.75 : r < 1 ? 0.9 : 1;
+    await curAudio.play();
+  } catch (e) { deviceSpeak(key); }
+}
+
+/* =========================================================================
+   UI
+   ========================================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>';
+const speakBtn = jp => `<button class="speak" data-act="say" data-say="${esc(jp)}" aria-label="Play audio">${SPK}</button>`;
+const jpLine = (jp, cls = '') => `<div class="jp ${cls}">${esc(jp)}</div><div class="rj">${esc(romaji(jp))}</div>`;
+
+let ui = { tab: 'today', daySel: null, kana: { view: 'practice', ex: 'single', mode: 'k2r', input: 'choice', cur: null, fb: null, last: null, right: 0, tries: 0, word: null, match: null, introDone: false },
+  cards: { filter: 'all', cur: null, shown: false, newDone: 0, done: 0, early: false, focusN: 0, focus: null, dir: 'mix', topic: 'all' },
+  pat: { open: null, drill: null, shown: false }, xfer: { mode: null, code: '', msg: '' }, build: { pid: 'all', item: null, ans: [], result: null, ok: 0, tries: 0 }, phr: { q: '', sit: 'all' } };
+try { const u = JSON.parse(localStorage.getItem('tabi-ui') || '{}'); if (u.tab) ui.tab = u.tab; if (u.kex) ui.kana.ex = u.kex; if (u.kview) ui.kana.view = u.kview; if (u.mode) ui.kana.mode = u.mode; if (u.input) ui.kana.input = u.input;
+  if (u.focusN) ui.cards.focusN = u.focusN; if (u.cfilter) ui.cards.filter = u.cfilter; if (u.cdir) ui.cards.dir = u.cdir; if (u.ctopic) ui.cards.topic = u.ctopic;
+  if (u.focus && Array.isArray(u.focus.ids)) ui.cards.focus = u.focus; } catch (e) {}
+function saveUi() { try { localStorage.setItem('tabi-ui', JSON.stringify({ tab: ui.tab, kex: ui.kana.ex, kview: ui.kana.view, mode: ui.kana.mode, input: ui.kana.input, focusN: ui.cards.focusN, cfilter: ui.cards.filter, cdir: ui.cards.dir, ctopic: ui.cards.topic, focus: ui.cards.focus })); } catch (e) {} }
+
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { t.hidden = true; }, 2200); }
+
+function applyRomaji() {
+  document.documentElement.classList.toggle('no-romaji', !state.settings.romaji);
+  $('#rtoggle').setAttribute('aria-pressed', String(!!state.settings.romaji));
+}
+
+function render() {
+  applyRomaji();
+  $('#daybadge').textContent = 'Day ' + unlockedDay() + ' / 7';
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab === ui.tab ? 'page' : 'false'));
+  const v = $('#view');
+  v.innerHTML = ({ today: viewToday, kana: viewKana, cards: viewCards, patterns: viewPatterns, build: viewBuild, phrases: viewPhrases })[ui.tab]();
+  if (ui.tab === 'kana') { const i = $('#kanaType'); if (i && !i.disabled && matchMedia('(pointer:fine)').matches) i.focus(); }
+}
+
+/* ---------- TODAY ---------- */
+function viewToday() {
+  const d = unlockedDay(), sel = ui.daySel || d, D = DAYS[sel - 1];
+  const tripIn = state.trip ? daysBetween(today(), state.trip) : null;
+  const tripTxt = tripIn == null ? '' : tripIn > 1 ? `Trip in ${tripIn} days` : tripIn === 1 ? 'Trip tomorrow' : tripIn === 0 ? 'Trip day!' : 'いってらっしゃい · enjoy Japan';
+  const [km] = kanaMastered(KSETS.map(s => s.id));
+  const pool = CARDS.filter(c => c.day <= d);
+  const dayCards = CARDS.filter(c => c.day === sel);
+  const seen = dayCards.filter(c => state.srs[srsKey(c, 'r')]).length;
+  const [dkm, dkt] = kanaMastered(D.kana);
+  const due = dueCount();
+  const pats = PATTERNS.filter(p => p.day === sel);
+  const locked = sel > d;
+  const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+
+  const steps = locked ? `
+    <div class="panel stack"><p>Day ${sel} unlocks automatically on ${esc(addDays(state.start, sel - 1))}. Ahead of schedule? Unlock it now.</p>
+    <button class="btn primary" data-act="unlock" data-day="${sel}">Unlock day ${sel}</button></div>` : `
+    <div class="steps">
+      <div class="step ${dkm === dkt ? 'ok' : ''}"><span class="n">1</span><div><h3>Kana · 10 min</h3><p>${esc(D.kana.map(id => KSETS.find(s => s.id === id).name).join(', '))} — ${dkm} of ${dkt} mastered</p><div class="bar"><i style="width:${pct(dkm, dkt)}%"></i></div></div>
+        <button class="btn" data-act="goKana" data-day="${sel}">Drill</button></div>
+      <div class="step"><span class="n">2</span><div><h3>Sentence patterns</h3>${pats.length ? `<div class="pchips">${pats.map(p => `<button class="pchip" data-act="openPat" data-id="${p.id}">${esc(p.title)}</button>`).join('')}</div>` : '<p>No new patterns today: review all of them in Build.</p>'}</div>
+        <button class="btn" data-act="tab" data-tab="patterns">Open</button></div>
+      <div class="step ${seen === dayCards.length && dayCards.length ? 'ok' : ''}"><span class="n">3</span><div><h3>New words & phrases</h3><p>${seen} of ${dayCards.length} introduced</p><div class="bar"><i style="width:${pct(seen, dayCards.length)}%"></i></div></div>
+        <button class="btn primary" data-act="goCards" data-day="${sel}">Learn</button></div>
+      <div class="step"><span class="n">4</span><div><h3>Build 10 sentences</h3><p>Put the pieces together using the formulas.</p></div>
+        <button class="btn" data-act="goBuild" data-day="${sel}">Build</button></div>
+      <div class="step ${due === 0 ? 'ok' : ''}"><span class="n">5</span><div><h3>Reviews through the day</h3><p>${due ? `${due} cards due now. Do a few minutes on your phone whenever you have a gap.` : 'Nothing due right now. Check back later.'}</p></div>
+        <button class="btn" data-act="tab" data-tab="cards">Review</button></div>
+    </div>`;
+
+  const groups = {};
+  dayCards.forEach(c => { const g = c.kind === 'phrase' ? 'Phrases · ' + PHRASES.find(p => p.id === c.cat).title : CATS[c.cat]; (groups[g] = groups[g] || []).push(c); });
+  const list = Object.entries(groups).map(([g, cs]) => `<div class="wl-cat">${esc(g)}</div>` + cs.map(c => `
+    <div class="wl-item"><div><span class="jp">${esc(c.jp)}</span>${c.k ? `<span class="kj">${esc(c.k)}</span>` : ''}<div class="rj">${esc(romaji(c.jp))}</div></div><div class="en">${esc(c.en)}</div>${speakBtn(c.jp)}</div>`).join('')).join('');
+
+  return `
+  <section class="hero">
+    <div class="eyebrow">Day ${d} of 7${tripTxt ? ' · ' + esc(tripTxt) : ''}</div>
+    <h1>${esc(DAYS[d - 1].t)}</h1>
+    <p class="lede jp">${esc(DAYS[d - 1].f)}</p>
+    <div class="stats">
+      <div class="stat"><b>${learnedCount()}</b><span>words learned</span></div>
+      <div class="stat"><b>${km}<small class="muted" style="font-size:13px"> / ${TOTAL_KANA}</small></b><span>kana mastered</span></div>
+      <div class="stat"><b>${due}</b><span>cards due</span></div>
+      <div class="stat"><b>${streak()}</b><span>day streak</span></div>
+    </div>
+  </section>
+  <section><h2>Course</h2><div class="days">${DAYS.map((x, i) => { const n = i + 1; return `<button class="day ${n < d ? 'done' : ''} ${n > d ? 'locked' : ''}" aria-pressed="${n === sel}" data-act="daySel" data-day="${n}" title="${esc(x.t)}"><span>Day</span><b>${n}</b></button>`; }).join('')}</div></section>
+  <section><h2>Day ${sel} · ${esc(D.t)}</h2>${steps}</section>
+  <section><h2>Day ${sel} vocabulary · ${dayCards.length}</h2><div class="wordlist">${list}</div></section>`;
+}
+
+/* ---------- KANA ---------- */
+// Kana are learned in small groups: drill a few "focus" groups hard, then move them into the "mix",
+// which keeps everything learned so far in rotation.
+const GROUPS = (() => {
+  const G = [];
+  for (const s of KSETS) {
+    const chunks = (s.id === 'h' || s.id === 'k') ? [[0], [1], [2], [3], [4], [5], [6], [8], [7, 9, 10]]
+      : (s.id === 'hc' || s.id === 'kc') ? [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9], [10]]
+      : s.rows.map((_, i) => [i]);
+    chunks.forEach((idx, i) => { const chars = idx.flatMap(r => s.rows[r]).filter(Boolean); G.push({ id: s.id + i, set: s.id, chars, quiz: chars.filter(c => !QUIZ_EXCLUDE.has(c)) }); });
+  }
+  return G;
+})();
+const GMAP = Object.fromEntries(GROUPS.map(g => [g.id, g]));
+// Characters people mix up; used as wrong options so practice targets the real confusions.
+const LOOKALIKE = [['ぬ','め','ね'],['ね','れ','わ'],['る','ろ'],['さ','ち','き'],['は','ほ','け'],['い','り','こ'],['ま','も'],['あ','お','め'],['く','へ'],['し','つ'],['た','な'],['う','ら'],['そ','て'],['ば','ぱ'],['ぶ','ぷ'],
+  ['シ','ツ'],['ソ','ン','リ'],['ク','ケ','タ'],['ウ','ワ','フ','ラ'],['ノ','メ','ナ'],['コ','ユ','ロ'],['チ','テ'],['ス','ヌ'],['ア','マ'],['エ','ユ'],['ル','レ'],['セ','サ'],['オ','ホ'],['カ','ケ'],['ヲ','ラ'],['バ','パ'],['ブ','プ']];
+const LOOK = {};
+LOOKALIKE.forEach(g => g.forEach(c => { LOOK[c] = [...new Set([...(LOOK[c] || []), ...g.filter(x => x !== c)])]; }));
+const ALWAYS = new Set(['っ', 'ッ', 'ー']);
+const groupMastered = g => g.quiz.every(c => kanaLevel(c) === 2);
+const groupLabel = id => id === 'weak' ? 'Weakest 8' : GMAP[id].chars.join('');
+
+function daySel(sets, f, m) {
+  m = [...new Set([...m, ...GROUPS.filter(groupMastered).map(g => g.id)])];
+  f = f.filter(id => !m.includes(id));
+  if (!f.some(id => GMAP[id] && sets.includes(GMAP[id].set))) {
+    const g = GROUPS.find(g => sets.includes(g.set) && !m.includes(g.id) && !f.includes(g.id));
+    if (g) f = [...f, g.id];
+  }
+  return { f, m };
+}
+function kanaSel() {
+  const s = state.settings;
+  if (!Array.isArray(s.kfocus) || !Array.isArray(s.kmix)) { const d = daySel(DAYS[unlockedDay() - 1].kana, [], []); s.kfocus = d.f; s.kmix = d.m; persistLocal(); }
+  return { f: s.kfocus.filter(id => id === 'weak' || GMAP[id]), m: s.kmix.filter(id => GMAP[id]) };
+}
+function setKanaSel(f, m) {
+  Object.assign(state.settings, { kfocus: f, kmix: m });
+  state.settingsT = Date.now();
+  Object.assign(ui.kana, { cur: null, fb: null, word: null, match: null, introDone: false });
+  save();
+}
+function toggleGroup(id, w) {
+  let { f, m } = kanaSel();
+  if (w === 'f') { f = f.includes(id) ? f.filter(x => x !== id) : [...f, id]; m = m.filter(x => x !== id); }
+  else { m = m.includes(id) ? m.filter(x => x !== id) : [...m, id]; f = f.filter(x => x !== id); }
+  setKanaSel(f, m);
+}
+function nextGroup() {
+  let { f, m } = kanaSel();
+  const moved = f.filter(id => id !== 'weak' && groupMastered(GMAP[id]));
+  m = [...new Set([...m, ...moved])]; f = f.filter(id => !moved.includes(id));
+  const idx = Math.max(-1, ...[...moved, ...f].filter(id => id !== 'weak').map(id => GROUPS.findIndex(g => g.id === id)));
+  const nxt = [...GROUPS.slice(idx + 1), ...GROUPS.slice(0, idx + 1)].find(g => !f.includes(g.id) && !m.includes(g.id) && !groupMastered(g));
+  if (nxt) f = [...f, nxt.id];
+  setKanaSel(f, m);
+  toast(nxt ? `New group: ${nxt.chars.join(' ')}` : moved.length ? 'Moved to the mix' : 'Every group is already in your practice');
+}
+function weakest(n) {
+  return GROUPS.flatMap(g => g.quiz).filter(c => kanaStat(c) && (kanaLevel(c) < 2 || kanaStat(c).w > 0))
+    .map(c => { const s = kanaStat(c); return [c, s.s * 2 - s.w]; }).sort((a, b) => a[1] - b[1]).slice(0, n).map(x => x[0]);
+}
+function kanaLists() {
+  const { f, m } = kanaSel();
+  const F = [...new Set(f.flatMap(id => id === 'weak' ? weakest(8) : GMAP[id].quiz))];
+  const M = [...new Set(m.flatMap(id => GMAP[id].quiz))].filter(c => !F.includes(c));
+  return { F, M, all: [...F, ...M] };
+}
+const kanaWeight = ch => { const s = kanaStat(ch); if (!s) return 5; return s.s >= 3 ? 1 : s.s === 2 ? 2 : 4 + (s.w > s.c ? 2 : 0); };
+function weightedPick(list, avoid) {
+  if (list.length > 1) list = list.filter(c => c !== avoid);
+  const w = list.map(kanaWeight); let r = Math.random() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < list.length; i++) { r -= w[i]; if (r <= 0) return list[i]; }
+  return list[list.length - 1];
+}
+// 70% of picks come from the focus groups, 30% from the mix.
+const fromLists = ({ F, M }) => F.length && M.length ? (Math.random() < .7 ? F : M) : F.length ? F : M;
+function kanaHit(ch, ok) {
+  const k = kanaKey(ch), s = state.kana[k] || { s: 0, c: 0, w: 0 };
+  state.kana[k] = ok ? { s: s.s + 1, c: s.c + 1, w: s.w, t: Date.now() } : { s: 0, c: s.c, w: s.w + 1, t: Date.now() };
+}
+// Wrong options: up to two look-alikes first, then random kana, never two options that read the same.
+function distractors(target, pool, n) {
+  const used = new Set([kanaLabel(target)]), out = [];
+  const add = c => { const l = kanaLabel(c); if (!used.has(l)) { used.add(l); out.push(c); } };
+  shuffled((LOOK[target] || []).filter(c => pool.includes(c))).slice(0, 2).forEach(add);
+  for (const c of shuffled(pool)) { if (out.length >= n) break; add(c); }
+  return out.slice(0, n);
+}
+
+/* Single characters */
+function nextKana() {
+  const K = ui.kana, L = kanaLists();
+  if (!L.all.length) { K.cur = null; return; }
+  const ch = weightedPick(fromLists(L), K.last), label = kanaLabel(ch);
+  const opts = shuffled([ch, ...distractors(ch, L.all, 3)]).map(c => K.mode === 'k2r' ? kanaLabel(c) : c);
+  K.cur = { ch, label, opts }; K.fb = null; K.last = ch;
+  if (K.mode === 'listen') setTimeout(() => { if (ui.kana.cur?.ch === ch) speak(ch); }, 150);
+}
+function answerKana(correct, picked) {
+  const K = ui.kana, { ch } = K.cur;
+  kanaHit(ch, correct); K.tries++; if (correct) K.right++;
+  K.fb = { correct, picked };
+  bumpAct(); save();
+  if (K.mode !== 'listen' || !correct) speak(ch);
+  render();
+  if (correct) setTimeout(() => { if (ui.tab === 'kana' && K.fb && K.cur?.ch === ch) { nextKana(); render(); } }, 750);
+}
+
+/* Whole words */
+const canon = s => s.toLowerCase().replace(/[^a-z]/g, '').replace(/shi/g, 'si').replace(/chi/g, 'ti').replace(/tsu/g, 'tu').replace(/fu/g, 'hu').replace(/ji/g, 'zi')
+  .replace(/sh/g, 'sy').replace(/ch/g, 'ty').replace(/j/g, 'zy').replace(/c(?=t)/g, 't').replace(/wo/g, 'o').replace(/ou/g, 'o').replace(/([aeiou])\1+/g, '$1').replace(/nn+/g, 'n').replace(/yy/g, 'y');
+function nextWord() {
+  const K = ui.kana, L = kanaLists();
+  if (!L.all.length) { K.word = null; return; }
+  const ok = new Set(L.all), prev = K.word?.jp;
+  const cands = READ_WORDS.filter(w => w.u.length >= 2 && w.u.length <= 7 && !ALWAYS.has(w.u[0]) && w.u.every(u => ok.has(u) || ALWAYS.has(u)));
+  const withF = cands.filter(w => w.u.some(u => L.F.includes(u)));
+  const real = (withF.length && Math.random() < .75 ? withF : cands).filter(w => w.jp !== prev);
+  let item;
+  if (real.length && (cands.length >= 4 || Math.random() < .5)) { const w = pick(real); item = { jp: w.jp, u: w.u, en: w.en }; }
+  else { const u = Array.from({ length: 2 + Math.floor(Math.random() * 2) }, () => weightedPick(fromLists(L))); item = { jp: u.join(''), u, en: null }; }
+  item.ans = romajiRaw(item.jp);
+  // Wrong options swap one sound for a look-alike or another kana you know.
+  const opts = new Set([item.ans]);
+  for (let t = 0; opts.size < 4 && t < 40; t++) {
+    const u = item.u.slice(), i = Math.floor(Math.random() * u.length);
+    if (ALWAYS.has(u[i])) continue;
+    const alt = pick(distractors(u[i], L.all, 2)); if (!alt) continue;
+    u[i] = alt; opts.add(romajiRaw(u.join('')));
+  }
+  item.opts = shuffled([...opts]); item.fb = null;
+  K.word = item;
+}
+function answerWord(val) {
+  const K = ui.kana, w = K.word; if (!w || w.fb) return;
+  const ok = canon(val) === canon(w.ans);
+  w.fb = { ok, val }; K.tries++;
+  if (ok) { K.right++; w.u.forEach(u => { if (!ALWAYS.has(u)) kanaHit(u, true); }); }
+  bumpAct(); save();
+  if (w.en) speak(w.jp);
+  render();
+}
+
+/* Match pairs */
+function newMatch() {
+  const K = ui.kana, L = kanaLists();
+  if (!L.all.length) { K.match = null; return; }
+  const n = Math.min(5, new Set(L.all.map(kanaLabel)).size), chars = [], labels = new Set();
+  for (let t = 0; chars.length < n && t < 300; t++) { const c = weightedPick(fromLists(L)), l = kanaLabel(c); if (!labels.has(l)) { labels.add(l); chars.push(c); } }
+  K.match = { left: shuffled(chars), right: shuffled(chars.map(kanaLabel)), done: [], miss: [], sel: null, bad: null, t0: Date.now(), end: null };
+}
+function tapMatch(side, i) {
+  const M = ui.kana.match; if (!M || M.end) return;
+  const isDone = side === 'l' ? M.done.includes(M.left[i]) : M.done.some(c => kanaLabel(c) === M.right[i]);
+  if (isDone) return;
+  if (!M.sel || M.sel.side === side) { M.sel = { side, i }; if (side === 'l') speak(M.left[i]); render(); return; }
+  const l = side === 'l' ? i : M.sel.i, r = side === 'r' ? i : M.sel.i, ch = M.left[l];
+  M.sel = null;
+  if (kanaLabel(ch) === M.right[r]) {
+    M.done.push(ch); if (!M.miss.includes(ch)) kanaHit(ch, true);
+    if (M.done.length === M.left.length) { M.end = Date.now(); bumpAct(); }
+    save(); speak(ch);
+  } else {
+    if (!M.miss.includes(ch)) M.miss.push(ch);
+    kanaHit(ch, false); save();
+    M.bad = { l, r };
+    setTimeout(() => { if (ui.kana.match === M) { M.bad = null; render(); } }, 500);
+  }
+  render();
+}
+
+/* Views */
+const focusChips = f => f.length ? f.map(id => `<span class="gchip">${esc(groupLabel(id))}</span>`).join('') : '<span class="small muted">none</span>';
+function viewKana() {
+  const K = ui.kana;
+  const head = `<section class="stack"><h1>Kana</h1>
+    <p class="lede">Learn a few characters at a time. Drill your focus groups until they turn green, then move them into the mix and start the next group.</p>
+    <div class="seg"><button aria-pressed="${K.view === 'practice'}" data-act="kview" data-v="practice">Practice</button><button aria-pressed="${K.view === 'groups'}" data-act="kview" data-v="groups">Groups</button><button aria-pressed="${K.view === 'chart'}" data-act="kview" data-v="chart">Chart</button></div></section>`;
+  return head + (K.view === 'chart' ? viewKanaChart() : K.view === 'groups' ? viewKanaGroups() : viewKanaPractice());
+}
+function viewKanaChart() {
+  return `<div class="legend"><span><i style="background:var(--surface)"></i>not practised</span><span><i style="background:var(--noun-soft)"></i>learning</span><span><i style="background:var(--good-soft)"></i>mastered (3 right in a row)</span></div>
+    <p class="small muted">The chart always shows romaji: it is your answer key. Tap any character to hear it.</p>`
+    + KSETS.map(s => `<section><h2 class="jp">${esc(s.name)}</h2><div class="kgrid">${s.rows.map(r => `<div class="krow" style="--cols:${s.cols}">${r.map(ch => ch ? `<button class="kcell m${kanaLevel(ch)}" data-act="say" data-say="${esc(ch)}"><span class="k">${esc(ch)}</span><span class="l">${esc(kanaLabel(ch))}</span></button>` : '<span class="kcell empty"></span>').join('')}</div>`).join('')}</div></section>`).join('');
+}
+function viewKanaGroups() {
+  const { f, m } = kanaSel(), L = kanaLists();
+  const top = `<section class="panel stack">
+    <div><h3>Practising now</h3><p class="small muted">Focus groups come up 70% of the time. The mix keeps what you've already learned fresh. A group is mastered when each kana in it was answered right 3 times in a row.</p></div>
+    <div class="row"><span class="small muted glabel">Focus</span>${focusChips(f)}</div>
+    <div class="row"><span class="small muted glabel">Mix</span><span class="small">${m.length ? `${m.length} groups · ${L.M.length} kana` : 'empty'}</span></div>
+    <div class="row"><button class="btn primary" data-act="knextGroup">Next group</button>
+      <button class="chip" aria-pressed="${f.includes('weak')}" data-act="kgroup" data-id="weak" data-w="f" title="Your 8 most-missed kana as a focus group">Weakest 8</button>
+      <button class="btn ghost" data-act="kclear" ${f.length ? '' : 'disabled'}>Clear focus</button></div>
+    <p class="small muted">Next group moves mastered focus groups into the mix and adds the next new group.</p></section>`;
+  const sets = KSETS.map(s => {
+    const gs = GROUPS.filter(g => g.set === s.id), allIn = gs.every(g => m.includes(g.id));
+    return `<section><div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0" class="jp">${esc(s.name)}</h2>
+      <button class="btn ghost small" data-act="kallmix" data-set="${s.id}">${allIn ? 'Remove all from mix' : 'Add all to mix'}</button></div>
+      <div class="glist">${gs.map(g => {
+        const inF = f.includes(g.id), inM = m.includes(g.id), done = g.quiz.filter(c => kanaLevel(c) === 2).length;
+        return `<div class="grow ${inF ? 'isf' : ''}"><div class="gk">${g.chars.map(c => `<span class="lv${kanaLevel(c)}">${esc(c)}</span>`).join('')}</div>
+          <span class="small muted gp">${done}/${g.quiz.length}</span>
+          <div class="gt"><button class="chip" aria-pressed="${inF}" data-act="kgroup" data-id="${g.id}" data-w="f">Focus</button><button class="chip" aria-pressed="${inM}" data-act="kgroup" data-id="${g.id}" data-w="m">Mix</button></div></div>`;
+      }).join('')}</div></section>`;
+  }).join('');
+  return top + sets;
+}
+function viewKanaPractice() {
+  const K = ui.kana, { f } = kanaSel(), L = kanaLists();
+  if (!L.all.length) return `<section class="panel empty"><div class="ch">あ</div><h3>Pick something to practise</h3><p class="muted">Start with a focus group, for example the あ row.</p>
+    <div class="row" style="justify-content:center"><button class="btn primary" data-act="knextGroup">Start the next group</button><button class="btn" data-act="kview" data-v="groups">Choose groups</button></div></section>`;
+  const mastered = f.filter(id => id !== 'weak' && groupMastered(GMAP[id]));
+  const summary = `<section class="panel stack" style="gap:8px">
+    <div class="row"><span class="small muted">Focus</span>${focusChips(f)}<span class="small muted">· mix ${L.M.length} kana</span><button class="btn ghost small" data-act="kview" data-v="groups" style="margin-left:auto">Edit groups</button></div>
+    ${mastered.length ? `<div class="banner"><span>${esc(mastered.map(groupLabel).join(' · '))} mastered!</span><button class="btn primary small" data-act="knextGroup">Move to mix & next group</button></div>` : ''}</section>`;
+  const fresh = L.F.filter(c => !kanaStat(c));
+  if (fresh.length && !K.introDone) return summary + `<section class="panel stack"><div class="eyebrow">New kana</div>
+    <h3>Meet ${fresh.length === 1 ? 'this character' : 'these ' + fresh.length + ' characters'}</h3>
+    <p class="small muted">Tap each one to hear it, and say it out loud. Then start practising.</p>
+    <div class="intro">${fresh.map(c => `<button class="kcell" data-act="say" data-say="${esc(c)}"><span class="k">${esc(c)}</span><span class="l">${esc(kanaLabel(c))}</span></button>`).join('')}</div>
+    <button class="btn primary wide" data-act="kintro">Start practising</button></section>`;
+  const ex = `<div class="seg"><button aria-pressed="${K.ex === 'single'}" data-act="kex" data-v="single">Single</button><button aria-pressed="${K.ex === 'words'}" data-act="kex" data-v="words">Words</button><button aria-pressed="${K.ex === 'match'}" data-act="kex" data-v="match">Match</button></div>`;
+  const body = K.ex === 'words' ? kanaWordsHtml() : K.ex === 'match' ? kanaMatchHtml() : kanaSingleHtml(L);
+  return summary + `<section class="stack">${ex}${body}</section>`;
+}
+function kanaSingleHtml(L) {
+  const K = ui.kana;
+  if (!K.cur || !L.all.includes(K.cur.ch)) nextKana();
+  const c = K.cur, fb = K.fb, typing = K.input === 'type' && K.mode === 'k2r';
+  const kanaOpts = K.mode !== 'k2r';
+  const answer = typing
+    ? `<form class="typein" data-form="kana"><input id="kanaType" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type romaji" aria-label="Romaji" ${fb ? 'disabled' : ''}><button class="btn primary" ${fb ? 'disabled' : ''}>Check</button></form>`
+    : `<div class="opts">${c.opts.map((o, i) => {
+        const isRight = kanaOpts ? o === c.ch : o === c.label;
+        const cls = fb ? (isRight ? 'right' : fb.picked === o ? 'wrong' : '') : '';
+        return `<button class="opt ${kanaOpts ? 'kana' : ''} ${cls}" data-act="kopt" data-i="${i}" ${fb ? 'disabled' : ''}>${esc(o)}</button>`; }).join('')}</div>`;
+  const prompt = K.mode === 'k2r' ? `<div class="genko ${[...c.ch].length > 1 ? 'wide' : ''}"><span class="ch">${esc(c.ch)}</span></div>`
+    : K.mode === 'r2k' ? `<div class="genko"><span class="ch" style="font-family:var(--font-ui);font-size:clamp(40px,12vw,64px)">${esc(c.label)}</span></div>`
+    : `<div class="genko"><button class="bigspk" data-act="say" data-say="${esc(c.ch)}" aria-label="Play the sound again">${SPK}</button></div>`;
+  let fbHtml = '<div class="fb"></div>';
+  if (fb && fb.correct) fbHtml = `<div class="fb good">Right: ${esc(c.ch)} = ${esc(c.label)}</div>`;
+  else if (fb) {
+    const pickedCh = kanaOpts ? fb.picked : null;
+    const look = pickedCh && (LOOK[c.ch] || []).includes(pickedCh);
+    fbHtml = `<div class="fb bad">${esc(c.ch)} is “${esc(c.label)}”${fb.picked ? ` · you chose ${esc(fb.picked)}${pickedCh ? ' = ' + esc(kanaLabel(pickedCh)) : ''}` : ''}</div>
+      ${look ? `<p class="small muted" style="text-align:center">${esc(c.ch)} and ${esc(pickedCh)} look alike. Compare them side by side in the chart.</p>` : ''}
+      <button class="btn primary wide" data-act="knext">Next</button>`;
+  }
+  const [m, t] = [L.all.filter(ch => kanaLevel(ch) === 2).length, L.all.length];
+  return `<div class="panel stack">
+    <div class="row" style="justify-content:space-between">
+      <div class="seg"><button aria-pressed="${K.mode === 'k2r'}" data-act="kmode" data-v="k2r">かな → abc</button><button aria-pressed="${K.mode === 'r2k'}" data-act="kmode" data-v="r2k">abc → かな</button><button aria-pressed="${K.mode === 'listen'}" data-act="kmode" data-v="listen">Listen</button></div>
+      ${K.mode === 'k2r' ? `<div class="seg"><button aria-pressed="${K.input === 'choice'}" data-act="kinput" data-v="choice">Choices</button><button aria-pressed="${K.input === 'type'}" data-act="kinput" data-v="type">Typing</button></div>` : ''}
+    </div>
+    ${prompt}${answer}${fbHtml}
+    <div class="row small muted" style="justify-content:space-between"><span>${m} / ${t} mastered in focus + mix</span><span>${K.right} / ${K.tries} this session</span></div>
+  </div><p class="kbd">Keyboard: 1–4 to answer, Enter for next.</p>`;
+}
+function kanaWordsHtml() {
+  const K = ui.kana;
+  if (!K.word) nextWord();
+  const w = K.word; if (!w) return '';
+  const typing = K.input === 'type', fb = w.fb;
+  const answer = typing
+    ? `<form class="typein" data-form="kword"><input id="kanaType" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the whole word in romaji" aria-label="Romaji" ${fb ? 'disabled' : ''}><button class="btn primary" ${fb ? 'disabled' : ''}>Check</button></form>`
+    : `<div class="opts wordopts">${w.opts.map((o, i) => { const cls = fb ? (o === w.ans ? 'right' : fb.val === o ? 'wrong' : '') : ''; return `<button class="opt ${cls}" data-act="kwopt" data-i="${i}" ${fb ? 'disabled' : ''}>${esc(o)}</button>`; }).join('')}</div>`;
+  const after = fb ? `<div class="units">${w.u.map(u => `<span class="unit"><span class="k">${esc(u)}</span><span class="l">${esc(u === 'ー' ? 'long' : ALWAYS.has(u) ? 'double' : kanaLabel(u))}</span></span>`).join('')}</div>
+    <div class="fb ${fb.ok ? 'good' : 'bad'}">${fb.ok ? 'Right!' : `It reads “${esc(w.ans)}”`} · ${w.en ? esc(w.en) : 'practice string, not a real word'}</div>
+    <div class="row" style="justify-content:center">${w.en ? speakBtn(w.jp) : ''}<button class="btn primary" data-act="kwnext">Next word</button></div>` : '<div class="fb"></div>';
+  return `<div class="panel stack">
+    <div class="row" style="justify-content:space-between"><span class="small muted">Read the whole word</span>
+      <div class="seg"><button aria-pressed="${!typing}" data-act="kinput" data-v="choice">Choices</button><button aria-pressed="${typing}" data-act="kinput" data-v="type">Typing</button></div></div>
+    <div class="wordbox"><span class="readw">${esc(w.jp)}</span></div>
+    ${answer}${after}
+    <p class="small muted">Small っ doubles the next sound (きっぷ = kippu). ー stretches the vowel (コーヒー = koohii). Words only use kana from your focus groups and mix.</p>
+    <div class="small muted">${K.right} / ${K.tries} this session</div></div>`;
+}
+function kanaMatchHtml() {
+  const K = ui.kana;
+  if (!K.match) newMatch();
+  const M = K.match; if (!M) return '';
+  const cell = (side, i, txt, done) => {
+    const sel = M.sel && M.sel.side === side && M.sel.i === i, bad = M.bad && (side === 'l' ? M.bad.l : M.bad.r) === i;
+    return `<button class="mcell ${side === 'l' ? 'kana' : ''} ${done ? 'done' : ''} ${sel ? 'sel' : ''} ${bad ? 'bad' : ''}" data-act="kmatch" data-side="${side}" data-i="${i}" ${done ? 'disabled' : ''}>${esc(txt)}</button>`;
+  };
+  const end = M.end
+    ? `<div class="fb good">Done in ${Math.round((M.end - M.t0) / 1000)}s · ${M.miss.length ? M.miss.length + ' mistake' + (M.miss.length > 1 ? 's' : '') : 'no mistakes'}</div><button class="btn primary wide" data-act="kmnext">Next round</button>`
+    : '<p class="small muted">Tap a kana, then its romaji. Go for speed.</p>';
+  return `<div class="panel stack"><div class="match">
+    <div class="mcol">${M.left.map((c, i) => cell('l', i, c, M.done.includes(c))).join('')}</div>
+    <div class="mcol">${M.right.map((r, i) => cell('r', i, r, M.done.some(c => kanaLabel(c) === r))).join('')}</div></div>${end}</div>`;
+}
+
+/* ---------- CARDS (spaced repetition) ---------- */
+const INT = [MIN, 10 * MIN, 60 * MIN, 5 * 60 * MIN, DAY_MS, 2 * DAY_MS, 4 * DAY_MS, 8 * DAY_MS];
+function schedule(s, g, now) {
+  let b = s ? s.b : 0;
+  if (g === 0) return { b: 0, due: now + MIN };
+  if (g === 1) { b = Math.max(1, b); return { b, due: now + Math.max(5 * MIN, INT[Math.min(b, 7)] / 2) }; }
+  b = b + (g === 2 ? 1 : 2);
+  return { b, due: now + INT[Math.min(b, 7)] };
+}
+const fmtInt = ms => ms < 60 * MIN ? Math.round(ms / MIN) + 'm' : ms < DAY_MS ? Math.round(ms / 36e5) + 'h' : Math.round(ms / DAY_MS) + 'd';
+// Topic values: 'all', 'day3', 'cat:food' (word category), 'phr:eat' (phrase situation).
+function topicMatch(c, t) {
+  if (!t || t === 'all') return true;
+  if (t.startsWith('day')) return c.day === +t.slice(3);
+  if (t.startsWith('cat:')) return c.kind !== 'phrase' && c.cat === t.slice(4);
+  if (t.startsWith('phr:')) return c.kind === 'phrase' && c.cat === t.slice(4);
+  return true;
+}
+function cardPool() { const d = unlockedDay(), f = ui.cards.filter, t = ui.cards.topic; return CARDS.filter(c => c.day <= d && (f === 'all' || c.kind === f) && topicMatch(c, t)); }
+function topicOptions() {
+  const d = unlockedDay(), cur = ui.cards.topic;
+  const n = t => CARDS.filter(c => c.day <= d && topicMatch(c, t)).length;
+  const opt = (v, label) => { const k = n(v); return k || v === cur ? `<option value="${v}" ${v === cur ? 'selected' : ''}>${esc(label)} (${k})</option>` : ''; };
+  return opt('all', 'Everything unlocked')
+    + `<optgroup label="By day">${DAYS.slice(0, d).map((D, i) => opt('day' + (i + 1), `Day ${i + 1} · ${D.t}`)).join('')}</optgroup>`
+    + `<optgroup label="Words by topic">${Object.keys(CATS).map(k => opt('cat:' + k, CATS[k])).join('')}</optgroup>`
+    + `<optgroup label="Phrases by situation">${PHRASES.map(p => opt('phr:' + p.id, p.title)).join('')}</optgroup>`;
+}
+function setTopic(t) { ui.cards.topic = t; ui.cards.cur = null; ui.cards.shown = false; ui.cards.newDone = 0; if (ui.cards.focusN) sampleFocus(); saveUi(); }
+/* Focus set: a fixed random sample drilled in a loop (ignores due times) until the learner shuffles. */
+const CMAP = Object.fromEntries(CARDS.map(c => [c.id, c]));
+const shuffled = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+function sampleFocus() {
+  const C = ui.cards, pool = cardPool(), n = Math.min(C.focusN, pool.length);
+  if (!n) { C.focus = null; return; }
+  // Cards you haven't learned yet are sampled first; learned ones only fill the remaining places.
+  const notYet = pool.filter(c => (state.srs[srsKey(c, 'r')]?.b || 0) < 3), known = pool.filter(c => (state.srs[srsKey(c, 'r')]?.b || 0) >= 3);
+  const ids = [...shuffled(notYet), ...shuffled(known)].slice(0, n).map(c => c.id);
+  C.focus = { ids, q: shuffled(ids), marks: {} };
+  C.cur = null; C.shown = false;
+}
+function focusValid() {
+  const C = ui.cards, f = C.focus;
+  if (!C.focusN) return false;
+  if (!f || f.ids.length !== Math.min(C.focusN, cardPool().length) || !f.ids.every(id => CMAP[id]) || f.q.length !== f.ids.length) sampleFocus();
+  return !!C.focus;
+}
+function pickCard() {
+  if (focusValid()) {
+    const c = CMAP[ui.cards.focus.q[0]], r = state.srs[srsKey(c, 'r')];
+    const forced = ui.cards.dir !== 'mix' ? ui.cards.dir : null;
+    const dir = forced || (r && r.b >= 2 && Math.random() < .5 ? 'p' : 'r');
+    return { c, dir, s: state.srs[srsKey(c, dir)] || null, focus: true };
+  }
+  // dir 'r' = Japanese → English only, 'p' = English → Japanese only, 'mix' = both (English → Japanese joins once a card is known).
+  const now = Date.now(), pool = cardPool(), D = ui.cards.dir, dirs = D === 'mix' ? ['r', 'p'] : [D];
+  let best = null;
+  for (const c of pool) for (const dir of dirs) { const s = state.srs[srsKey(c, dir)]; if (s && s.due <= now && (!best || s.due < best.s.due)) best = { c, dir, s }; }
+  if (best) return best;
+  if (ui.cards.newDone < state.settings.batch) {
+    if (D === 'p') { for (const c of pool) if (!state.srs[srsKey(c, 'p')]) return { c, dir: 'p', s: null }; }
+    if (D === 'mix') for (const c of pool) { const r = state.srs[srsKey(c, 'r')]; if (r && r.b >= 2 && !state.srs[srsKey(c, 'p')]) return { c, dir: 'p', s: null }; }
+    if (D !== 'p') for (const c of pool) if (!state.srs[srsKey(c, 'r')]) return { c, dir: 'r', s: null };
+  }
+  if (ui.cards.early) {
+    for (const c of pool) for (const dir of dirs) { const s = state.srs[srsKey(c, dir)]; if (s && (!best || s.due < best.s.due)) best = { c, dir, s }; }
+    return best;
+  }
+  return null;
+}
+function rateCard(g) {
+  const cur = ui.cards.cur; if (!cur) return;
+  const now = Date.now(), n = schedule(cur.s, g, now), k = srsKey(cur.c, cur.dir);
+  state.srs[k] = { b: n.b, due: n.due, t: now, n: (cur.s?.n || 0) + 1, l: (cur.s?.l || 0) + (g === 0 && cur.s ? 1 : 0) };
+  if (cur.focus && ui.cards.focus) {
+    // Again: back after 2 cards · Hard: halfway down the deck · Good / Easy: to the bottom.
+    const f = ui.cards.focus, q = f.q; q.splice(q.indexOf(cur.c.id), 1);
+    const pos = g === 0 ? Math.min(2, q.length) : g === 1 ? Math.ceil(q.length / 2) : q.length;
+    q.splice(pos, 0, cur.c.id); f.marks[cur.c.id] = g; saveUi();
+  } else if (!cur.s) ui.cards.newDone++;
+  ui.cards.done++; ui.cards.early = false;
+  bumpAct(); save();
+  ui.cards.cur = null; ui.cards.shown = false;
+  render();
+}
+function viewCards() {
+  const C = ui.cards, pool = cardPool(), now = Date.now();
+  let due = 0, fresh = 0, learned = 0, nextDue = Infinity;
+  for (const c of pool) { const r = state.srs[srsKey(c, 'r')]; if (!r) fresh++; else if (r.b >= 3) learned++;
+    for (const dir of ['r', 'p']) { const s = state.srs[srsKey(c, dir)]; if (s) { if (s.due <= now) due++; else nextDue = Math.min(nextDue, s.due); } } }
+  const head = `<section class="stack"><h1>Cards</h1>
+    <div class="row" style="justify-content:space-between"><div class="seg">
+      <button aria-pressed="${C.filter === 'all'}" data-act="cfilter" data-v="all">All</button>
+      <button aria-pressed="${C.filter === 'word'}" data-act="cfilter" data-v="word">Words</button>
+      <button aria-pressed="${C.filter === 'phrase'}" data-act="cfilter" data-v="phrase">Phrases</button></div>
+      <div class="seg" role="group" aria-label="Card direction" title="Off: mixed directions, as the course schedules them">
+      <button aria-pressed="${C.dir === 'mix'}" data-act="cdir" data-v="mix">Off</button>
+      <button aria-pressed="${C.dir === 'p'}" data-act="cdir" data-v="p">EN → JP</button>
+      <button aria-pressed="${C.dir === 'r'}" data-act="cdir" data-v="r">JP → EN</button></div></div>
+    <div class="topicrow"><label class="small muted" for="cardTopic">Practise</label><select id="cardTopic" data-change="cardTopic">${topicOptions()}</select></div>
+      <span class="small muted">${pool.length} cards · ${due} due · ${fresh} new · ${learned} learned</span>
+    <div class="focusbar">
+      <label for="focusN"><b>Focus set</b><span class="small muted">Drill a small random sample until you shuffle</span></label>
+      <div class="focusctl"><input type="range" id="focusN" min="0" max="${pool.length}" step="1" value="${Math.min(C.focusN, pool.length)}" data-input="focusN" data-change="focusN" aria-describedby="focusOut">
+      <output id="focusOut" for="focusN">${C.focusN ? Math.min(C.focusN, pool.length) : 'Off'}</output>
+      <button class="btn" data-act="shuffle" ${C.focusN ? '' : 'disabled'}>Shuffle</button></div>
+    </div>
+    ${focusValid() ? `<div class="focusdots" aria-label="Focus set progress">${C.focus.ids.map(id => { const m = C.focus.marks[id]; return `<span class="fd ${m == null ? '' : m === 0 ? 'again' : m === 1 ? 'hard' : 'ok'} ${C.cur?.c.id === id || (!C.cur && C.focus.q[0] === id) ? 'now' : ''}" title="${esc(CMAP[id].jp)}"></span>`; }).join('')}
+      <span class="small muted">${C.focus.ids.filter(id => C.focus.marks[id] >= 2).length} / ${C.focus.ids.length} known this round</span></div>` : ''}
+    </section>`;
+  if (!C.cur) { C.cur = pickCard(); C.shown = false; if (C.cur && C.cur.dir === 'r' && state.settings.autoplay && C.done > 0) setTimeout(() => speak(C.cur.c.jp), 120); }
+  const cur = C.cur;
+  if (!pool.length) return head + `<section class="panel empty"><div class="ch">なし</div><h3>No cards in this selection</h3>
+      <p class="muted">This topic has no ${C.filter === 'phrase' ? 'phrases' : C.filter === 'word' ? 'words' : 'cards'} unlocked yet.</p>
+      <div class="row" style="justify-content:center"><button class="btn primary" data-act="cfilter" data-v="all">Show words and phrases</button></div></section>`;
+  if (!cur) {
+    const wait = nextDue < Infinity ? fmtInt(nextDue - now) : null;
+    return head + `<section class="panel empty"><div class="ch">よし</div><h3>All caught up</h3>
+      <p class="muted">${C.newDone >= state.settings.batch ? `You've introduced ${C.newDone} new cards this session.` : 'Nothing else to study right now.'}${wait ? ` Next review in ${wait}.` : ''}</p>
+      <div class="row" style="justify-content:center">${fresh ? `<button class="btn primary" data-act="moreNew">Learn ${Math.min(fresh, state.settings.batch)} more new</button>` : ''}${wait ? '<button class="btn" data-act="early">Study ahead</button>' : ''}</div>
+      ${!fresh && unlockedDay() < 7 ? `<p class="small muted">Want more? Unlock day ${unlockedDay() + 1} from the Today tab.</p>` : ''}</section>`;
+  }
+  const { c, dir, s } = cur;
+  const kind = c.kind === 'phrase' ? 'Phrase' : c.cat === 'verb' ? 'Verb' : 'Word';
+  const tags = `<div class="tags">${!s ? '<span class="tag new">New</span>' : ''}<span class="tag">${kind}</span><span class="tag">${dir === 'r' ? 'Read it' : 'Say it in Japanese'}</span></div>`;
+  const jpBlock = `<div class="bigjp">${esc(c.jp)}</div>${c.k ? `<div class="kj">${esc(c.k)}</div>` : ''}<div class="rj">${esc(romaji(c.jp))}</div>`;
+  const enBlock = `<div class="bigen">${esc(c.en)}</div>${c.extra ? `<div class="extra jp">${esc(c.extra)}</div>` : ''}`;
+  const front = dir === 'r' ? jpBlock + `<div style="display:flex;justify-content:center">${speakBtn(c.jp)}</div>` : enBlock + '<p class="small muted">Say it out loud, then reveal.</p>';
+  const back = dir === 'r' ? enBlock : jpBlock + `<div style="display:flex;justify-content:center">${speakBtn(c.jp)}</div>`;
+  const labels = ['Again', 'Hard', 'Good', 'Easy'];
+  const rates = C.shown ? `<div class="rates">${labels.map((l, g) => `<button class="rate r${g}" data-act="rate" data-g="${g}">${l}<small>${cur.focus ? ['after 2 cards', 'mid-deck', 'to the end', 'to the end'][g] : fmtInt(schedule(s, g, now).due - now)}</small></button>`).join('')}</div>`
+    : `<button class="btn primary wide" data-act="reveal">Show answer</button>`;
+  return head + `<section class="panel flash pop">${tags}${front}${C.shown ? '<div class="divider"></div>' + back : ''}</section>${rates}
+    <p class="kbd">Keyboard: Space to reveal, 1–4 to rate. New cards first appear as Japanese → English; once you know one, the English → Japanese side joins in.</p>`;
+}
+
+/* ---------- PATTERNS ---------- */
+const formulaHtml = f => `<div class="formula">${f.map(([t, x]) => `<span class="fslot ${t}">${esc(x)}<small>${({ n: 'slot', v: 'verb', p: 'particle', f: 'fixed' })[t]}</small></span>`).join('')}</div>`;
+const CHEAT = [['は','Topic: "as for X". Said "wa".','わたし は スペインじん です'],['が','Subject; also the thing you like, want or that hurts.','すし が すき です'],['を','Object of an action. Said "o".','ビール を のみます'],['に','Destination ("to"), time ("at"), a choice.','えき に いきます'],['で','Where an action happens; by means of.','でんしゃ で いきます'],['の','Of / \'s.','わたし の パスポート'],['と','And (between nouns); with.','かのじょ と いきます'],['も','Also / too (replaces は or が).','わたし も'],['か','Question mark you can say out loud.','いきますか'],['ね','Tag: "…isn\'t it?", seeking agreement.','きれい です ね']];
+function viewPatterns() {
+  const P = ui.pat, d = unlockedDay();
+  if (P.open) {
+    const p = PMAP[P.open];
+    if (!P.drill) { P.drill = p.gen(); P.shown = false; }
+    return `<button class="back" data-act="closePat">← All patterns</button>
+    <section class="stack"><div class="eyebrow">Day ${p.day} pattern</div><h1 class="jp">${esc(p.title)}</h1><p class="lede">${esc(p.meaning)}</p>${formulaHtml(p.formula)}</section>
+    <section class="panel"><h2>How it works</h2><ul class="notes">${p.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul></section>
+    <section class="panel"><h2>Examples</h2>${p.examples.map(([jp, en]) => `<div class="ex">${jpLine(jp)}<div class="en">${esc(en)}</div>${speakBtn(jp)}</div>`).join('')}</section>
+    <section class="panel stack"><h2>Quick drill</h2><p class="small muted">Say the Japanese out loud, then check.</p>
+      <div class="prompt"><div class="en">${esc(P.drill[1])}</div></div>
+      ${P.shown ? `<div class="solution">${jpLine(P.drill[0])}${speakBtn(P.drill[0])}</div><div class="row"><button class="btn primary" data-act="drillNext">Next sentence</button><button class="btn" data-act="buildPat" data-id="${p.id}">Build with tiles</button></div>`
+        : `<div class="row"><button class="btn primary" data-act="drillShow">Show answer</button><button class="btn" data-act="buildPat" data-id="${p.id}">Build with tiles</button></div>`}
+    </section>`;
+  }
+  const byDay = DAYS.map((D, i) => { const ps = PATTERNS.filter(p => p.day === i + 1); if (!ps.length) return ''; const locked = i + 1 > d;
+    return `<section><h2>Day ${i + 1} · ${esc(D.t)}</h2><div class="plist">${ps.map(p => `<button class="prow ${locked ? 'locked' : ''}" data-act="openPat" data-id="${p.id}"><span class="t">${esc(p.title)}</span><span class="m">${esc(p.meaning)}</span>${locked ? `<span class="lk">Day ${p.day}</span>` : ''}</button>`).join('')}</div></section>`; }).join('');
+  return `<section class="stack"><h1>Patterns</h1><p class="lede">Each pattern is a formula. Learn the fixed parts, then drop any word into the coloured slots.</p>
+    <div class="formula"><span class="fslot n">X<small>slot</small></span><span class="fslot p">は<small>particle</small></span><span class="fslot v">V<small>verb</small></span><span class="fslot f">です<small>fixed</small></span></div></section>
+    <details class="panel cheat"><summary>Particle cheat sheet</summary><div class="tw"><table>${CHEAT.map(([p, m, ex]) => `<tr><td>${p}</td><td>${esc(m)}<div class="jp" style="margin-top:2px">${esc(ex)}</div><div class="rj">${esc(romaji(ex))}</div></td></tr>`).join('')}</table></div></details>
+    ${byDay}`;
+}
+
+/* ---------- BUILD ---------- */
+const PARTICLES = new Set(['は','が','を','に','で','の','と','も','か','へ']);
+function buildPatterns() { const d = unlockedDay(), B = ui.build; if (B.pid === 'all') return PATTERNS.filter(p => p.day <= d); if (B.pid.startsWith('day')) { const n = +B.pid.slice(3); return PATTERNS.filter(p => p.day === n); } return [PMAP[B.pid]].filter(Boolean); }
+function newBuild() {
+  const ps = buildPatterns().length ? buildPatterns() : PATTERNS.filter(p => p.day === 1);
+  const p = pick(ps), [jp, en] = p.gen(), tokens = jp.split(' ');
+  const bank = tokens.map(t => ({ t }));
+  if (Math.random() < .7) { const opts = ['を','に','で','の'].filter(x => !tokens.includes(x)); if (opts.length) bank.push({ t: pick(opts) }); }
+  bank.sort(() => Math.random() - .5);
+  ui.build.item = { p, jp, en, tokens, bank }; ui.build.ans = []; ui.build.result = null;
+}
+function viewBuild() {
+  const B = ui.build, d = unlockedDay();
+  if (!B.item) newBuild();
+  const it = B.item;
+  const opts = [`<option value="all" ${B.pid === 'all' ? 'selected' : ''}>All unlocked patterns</option>`]
+    .concat(DAYS.map((D, i) => i + 1 <= d && PATTERNS.some(p => p.day === i + 1) ? `<option value="day${i + 1}" ${B.pid === 'day' + (i + 1) ? 'selected' : ''}>Day ${i + 1} patterns</option>` : ''))
+    .concat(PATTERNS.filter(p => p.day <= d || p.id === B.pid).map(p => `<option value="${p.id}" ${B.pid === p.id ? 'selected' : ''}>${esc(p.title)} · ${esc(p.meaning)}</option>`)).join('');
+  const tile = (t, i, used, act) => `<button class="tile ${PARTICLES.has(t) ? 'prt' : ''} ${used ? 'used' : ''}" data-act="${act}" data-i="${i}" ${B.result ? 'disabled' : ''}><span class="jp">${esc(t)}</span><span class="rj">${esc(romajiWord(t))}</span></button>`;
+  const ansHtml = B.ans.map((bi, i) => tile(it.bank[bi].t, i, false, 'unplace')).join('');
+  const bankHtml = it.bank.map((b, i) => tile(b.t, i, B.ans.includes(i), 'place')).join('');
+  const res = B.result;
+  return `<section class="stack"><h1>Build</h1><p class="lede">Read the English, then tap the Japanese pieces in the right order. There may be one extra particle you don't need.</p>
+    <label class="small muted" for="buildFilter">Practise</label><select id="buildFilter" data-change="buildFilter">${opts}</select></section>
+    <section class="panel stack">
+      <div class="prompt"><button class="pchip" style="justify-self:start" data-act="openPat" data-id="${it.p.id}">${esc(it.p.title)}</button><div class="en">${esc(it.en)}</div></div>
+      <div class="answer ${res ? (res === 'ok' ? 'good' : 'bad') : ''}">${ansHtml}</div>
+      <div class="bank">${bankHtml}</div>
+      ${res ? `<div class="fb ${res === 'ok' ? 'good' : 'bad'}">${res === 'ok' ? 'Correct!' : 'Not quite. The answer is:'}</div>
+        <div class="solution">${jpLine(it.jp)}${speakBtn(it.jp)}</div>
+        <button class="btn primary wide" data-act="buildNext">Next sentence</button>`
+      : `<div class="row"><button class="btn primary" data-act="buildCheck" ${B.ans.length ? '' : 'disabled'}>Check</button><button class="btn" data-act="buildClear">Clear</button><button class="btn ghost" data-act="say" data-say="${esc(it.jp)}">Hint: hear it</button></div>`}
+      <div class="small muted">${B.ok} / ${B.tries} correct this session · ${state.built.ok} total</div>
+    </section>`;
+}
+
+/* ---------- PHRASES ---------- */
+function phrResults() {
+  const q = ui.phr.q.trim().toLowerCase(), sit = ui.phr.sit;
+  const match = (jp, en) => !q || jp.includes(q) || romaji(jp).replace(/'/g, '').includes(q) || en.toLowerCase().includes(q);
+  let html = PHRASES.filter(s => sit === 'all' || s.id === sit).map(s => {
+    const items = s.items.filter(([jp, en]) => match(jp, en)); if (!items.length) return '';
+    return `<section><h2>${esc(s.title)}</h2><div class="wordlist">${items.map(([jp, en]) => `<div class="phr">${jpLine(jp)}<div class="en">${esc(en)}</div>${speakBtn(jp)}</div>`).join('')}</div></section>`; }).join('');
+  if (q) {
+    const words = CARDS.filter(c => c.kind === 'word' && match(c.jp, c.en)).slice(0, 40);
+    if (words.length) html += `<section><h2>Words</h2><div class="wordlist">${words.map(c => `<div class="phr"><div><span class="jp">${esc(c.jp)}</span>${c.k ? ` <span class="small muted jp">${esc(c.k)}</span>` : ''}</div><div class="rj">${esc(romaji(c.jp))}</div><div class="en">${esc(c.en)}</div>${speakBtn(c.jp)}</div>`).join('')}</div></section>`;
+  }
+  return html || '<p class="muted">Nothing matches. Try English, romaji or kana.</p>';
+}
+function viewPhrases() {
+  return `<section class="stack"><h1>Phrasebook</h1><p class="lede">Everything you need on the trip, by situation. Tap the speaker and let your phone talk for you if you freeze.</p>
+    <input class="search" id="phrQ" type="search" placeholder="Search English, romaji or かな" value="${esc(ui.phr.q)}" data-input="phr" autocomplete="off">
+    <div class="row"><button class="chip" aria-pressed="${ui.phr.sit === 'all'}" data-act="sit" data-id="all">All</button>${PHRASES.map(s => `<button class="chip" aria-pressed="${ui.phr.sit === s.id}" data-act="sit" data-id="${s.id}">${esc(s.title)}</button>`).join('')}</div></section>
+    <div id="phrOut" class="stack" style="gap:22px">${phrResults()}</div>`;
+}
+
+/* ---------- SETTINGS ---------- */
+let resetArmed = false;
+function openSettings() {
+  const s = state.settings;
+  const nClips = Object.keys(AUDIO).length;
+  const voice = nClips ? `Natural recorded voice (Nanami), ${nClips} clips loaded.` : packsLoading && packsLoaded < PACKS.length ? 'Loading the recorded voice…' : jaVoice ? `Recordings unavailable here; using device voice: ${esc(jaVoice.name)}` : 'Recordings unavailable here and no Japanese device voice found.';
+  const sync = remote ? (syncState === 'error' ? 'Could not reach your account just now. Progress is kept on this device and will sync later.' : 'Progress syncs to your Claude account. Open this page on your phone to continue there.') : 'Progress is saved on this device only.';
+  $('#sheet').innerHTML = `
+    <div class="row" style="justify-content:space-between"><h3 id="setTitle">Settings</h3><button class="btn ghost" data-act="closeSettings">Done</button></div>
+    <div class="set"><b>Show romaji</b><p>Latin letters under the Japanese. Turn it off once you can read kana.</p><button class="rtoggle" data-act="romaji" aria-pressed="${!!s.romaji}"><span class="sw"></span>${s.romaji ? 'On' : 'Off'}</button></div>
+    <div class="set"><b>Auto-play audio</b><p>Read new Japanese cards aloud.</p><button class="rtoggle" data-act="autoplay" aria-pressed="${!!s.autoplay}"><span class="sw"></span>${s.autoplay ? 'On' : 'Off'}</button></div>
+    <div class="set"><b>Voice speed</b><p>${voice}</p><div class="seg">${[[.7, 'Slow'], [.85, 'Calm'], [1, 'Natural']].map(([v, l]) => `<button aria-pressed="${s.rate === v}" data-act="rateSet" data-v="${v}">${l}</button>`).join('')}</div></div>
+    <div class="set"><b>New cards per session</b><p>How many new cards to introduce before you get a break.</p><div class="seg">${[10, 20, 40].map(v => `<button aria-pressed="${s.batch === v}" data-act="batch" data-v="${v}">${v}</button>`).join('')}</div></div>
+    <div class="set"><b>Course start</b><p>A new day unlocks each day from this date.</p><input type="date" id="startDate" value="${esc(state.start)}" data-change="start"></div>
+    <div class="set"><b>Departure date</b><p>Used for the countdown.</p><input type="date" id="tripDate" value="${esc(state.trip || '')}" data-change="trip"></div>
+    <div class="set"><b>Unlock everything</b><p>Open all 7 days now.</p><button class="btn" data-act="unlock" data-day="7">Unlock</button></div>
+    <div class="set"><b>Sync</b><p>${sync}</p><span></span></div>
+    <div class="set"><b>Move progress between devices</b><p>Make a code here, then paste it on your other device (the offline app or the claude.ai version). Progress is merged: for each card the most recent result wins.</p>
+      <div class="row" style="flex-direction:column;align-items:stretch"><button class="btn" data-act="exportCode">Copy code</button><button class="btn" data-act="showImport">Paste code</button></div></div>
+    ${ui.xfer.mode === 'export' ? `<div class="xfer"><label class="small muted" for="xferOut">Your progress code</label><textarea id="xferOut" rows="4" readonly>${esc(ui.xfer.code)}</textarea>
+      <div class="row"><button class="btn primary" data-act="copyCode">Copy</button><span class="small muted">${esc(ui.xfer.msg)}</span></div></div>` : ''}
+    ${ui.xfer.mode === 'import' ? `<div class="xfer"><label class="small muted" for="xferIn">Paste a progress code</label><textarea id="xferIn" rows="4" placeholder="TNZ1:…"></textarea>
+      <div class="row"><button class="btn primary" data-act="importCode">Import</button><span class="small muted">${esc(ui.xfer.msg)}</span></div></div>` : ''}
+    <div class="set"><b>Reset progress</b><p>Erases all cards, kana and stats on every device.</p><button class="btn danger" data-act="reset">${resetArmed ? 'Tap again to erase' : 'Reset'}</button></div>`;
+  $('#scrim').hidden = false;
+}
+/* ---------- PROGRESS CODES (move progress between devices) ---------- */
+const b64 = u8 => { let bin = ''; for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode(...u8.subarray(i, i + 0x8000)); return btoa(bin); };
+async function makeCode() {
+  const json = JSON.stringify(state);
+  try {
+    if (window.CompressionStream) return 'TNZ1:' + b64(new Uint8Array(await new Response(new Blob([json]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer()));
+  } catch (e) {}
+  return 'TNJ1:' + b64(new TextEncoder().encode(json));
+}
+async function readCode(code) {
+  code = code.replace(/\s+/g, '');
+  const bytes = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  if (code.startsWith('TNZ1:')) return JSON.parse(await new Response(new Blob([bytes(code.slice(5))]).stream().pipeThrough(new DecompressionStream('gzip'))).text());
+  if (code.startsWith('TNJ1:')) return JSON.parse(new TextDecoder().decode(bytes(code.slice(5))));
+  throw new Error('format');
+}
+function copyText(text, onDone) {
+  const fallback = () => { const t = $('#xferOut'); if (t) { t.focus(); t.select(); } onDone('Select the code and copy it.'); };
+  try { navigator.clipboard.writeText(text).then(() => onDone('Copied. Paste it on your other device.'), fallback); } catch (e) { fallback(); }
+}
+function settingsChanged() { state.settingsT = Date.now(); save(); render(); if (!$('#scrim').hidden) openSettings(); }
+
+/* ---------- EVENTS ---------- */
+document.addEventListener('click', e => {
+  if (e.target.id === 'scrim') { $('#scrim').hidden = true; return; }
+  const tabBtn = e.target.closest('.tab');
+  if (tabBtn) { ui.tab = tabBtn.dataset.tab; saveUi(); render(); window.scrollTo(0, 0); return; }
+  if (e.target.closest('#rtoggle')) { state.settings.romaji = !state.settings.romaji; settingsChanged(); return; }
+  if (e.target.closest('#openSettings')) { resetArmed = false; openSettings(); return; }
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const a = el.dataset.act, K = ui.kana, B = ui.build;
+  switch (a) {
+    case 'say': speak(el.dataset.say); break;
+    case 'tab': ui.tab = el.dataset.tab; saveUi(); render(); window.scrollTo(0, 0); break;
+    case 'daySel': ui.daySel = +el.dataset.day; render(); break;
+    case 'unlock': state.manualDay = Math.max(state.manualDay || 1, +el.dataset.day); ui.daySel = +el.dataset.day; B.item = null; settingsChanged(); toast(`Day ${el.dataset.day} unlocked`); break;
+    case 'goKana': { const k = kanaSel(), d = daySel(DAYS[+el.dataset.day - 1].kana, k.f, k.m); setKanaSel(d.f, d.m); K.view = 'practice'; ui.tab = 'kana'; saveUi(); render(); window.scrollTo(0, 0); break; }
+    case 'goBuild': B.pid = PATTERNS.some(p => p.day === +el.dataset.day) ? 'day' + el.dataset.day : 'all'; B.item = null; ui.tab = 'build'; saveUi(); render(); window.scrollTo(0, 0); break;
+    case 'kview': K.view = el.dataset.v; saveUi(); render(); break;
+    case 'kex': K.ex = el.dataset.v; saveUi(); render(); break;
+    case 'kgroup': toggleGroup(el.dataset.id, el.dataset.w); render(); break;
+    case 'knextGroup': nextGroup(); K.view = 'practice'; saveUi(); render(); break;
+    case 'kclear': setKanaSel([], kanaSel().m); render(); break;
+    case 'kallmix': { const { f, m } = kanaSel(), ids = GROUPS.filter(g => g.set === el.dataset.set).map(g => g.id), all = ids.every(id => m.includes(id));
+      setKanaSel(f.filter(id => !ids.includes(id)), all ? m.filter(id => !ids.includes(id)) : [...new Set([...m, ...ids])]); render(); break; }
+    case 'kintro': K.introDone = true; render(); break;
+    case 'kwopt': answerWord(K.word.opts[+el.dataset.i]); break;
+    case 'kwnext': nextWord(); render(); break;
+    case 'kmatch': tapMatch(el.dataset.side, +el.dataset.i); break;
+    case 'kmnext': newMatch(); render(); break;
+    case 'kmode': K.mode = el.dataset.v; K.cur = null; saveUi(); render(); break;
+    case 'kinput': K.input = el.dataset.v; saveUi(); render(); break;
+    case 'kopt': { if (K.fb) break; const o = K.cur.opts[+el.dataset.i]; answerKana(K.mode === 'k2r' ? o === K.cur.label : o === K.cur.ch, o); break; }
+    case 'knext': nextKana(); render(); break;
+    case 'cfilter': ui.cards.filter = el.dataset.v; ui.cards.cur = null; if (ui.cards.focusN) sampleFocus(); saveUi(); render(); break;
+    case 'goCards': setTopic('day' + el.dataset.day); ui.tab = 'cards'; saveUi(); render(); window.scrollTo(0, 0); break;
+    case 'cdir': ui.cards.dir = el.dataset.v; ui.cards.cur = null; ui.cards.shown = false; saveUi(); render(); break;
+    case 'shuffle': sampleFocus(); saveUi(); render(); toast('New focus set'); break;
+    case 'reveal': ui.cards.shown = true; render(); if (ui.cards.cur?.dir === 'p' && state.settings.autoplay) speak(ui.cards.cur.c.jp); break;
+    case 'rate': rateCard(+el.dataset.g); break;
+    case 'moreNew': ui.cards.newDone = 0; ui.cards.cur = null; render(); break;
+    case 'early': ui.cards.early = true; ui.cards.cur = null; render(); break;
+    case 'openPat': ui.pat.open = el.dataset.id; ui.pat.drill = null; ui.tab = 'patterns'; saveUi(); render(); window.scrollTo(0, 0); break;
+    case 'closePat': ui.pat.open = null; render(); break;
+    case 'drillShow': ui.pat.shown = true; render(); speak(ui.pat.drill[0]); break;
+    case 'drillNext': ui.pat.drill = null; render(); break;
+    case 'buildPat': B.pid = el.dataset.id; B.item = null; ui.tab = 'build'; saveUi(); render(); window.scrollTo(0, 0); break;
+    case 'place': if (!B.result && !B.ans.includes(+el.dataset.i)) { B.ans.push(+el.dataset.i); render(); } break;
+    case 'unplace': if (!B.result) { B.ans.splice(+el.dataset.i, 1); render(); } break;
+    case 'buildClear': B.ans = []; render(); break;
+    case 'buildCheck': { const it = B.item, got = B.ans.map(i => it.bank[i].t).join(' '); const ok = got === it.tokens.join(' ');
+      B.result = ok ? 'ok' : 'bad'; B.tries++; state.built.n++; if (ok) { B.ok++; state.built.ok++; } bumpAct(); save(); render(); speak(it.jp); break; }
+    case 'buildNext': B.item = null; render(); break;
+    case 'sit': ui.phr.sit = el.dataset.id; render(); break;
+    case 'closeSettings': $('#scrim').hidden = true; break;
+    case 'exportCode': ui.xfer = { mode: 'export', code: '', msg: 'Making code…' }; openSettings();
+      makeCode().then(code => { ui.xfer.code = code; ui.xfer.msg = ''; openSettings(); copyText(code, msg => { ui.xfer.msg = msg; openSettings(); }); }); break;
+    case 'copyCode': copyText(ui.xfer.code, msg => { ui.xfer.msg = msg; openSettings(); }); break;
+    case 'showImport': ui.xfer = { mode: 'import', code: '', msg: '' }; openSettings(); setTimeout(() => $('#xferIn')?.focus(), 50); break;
+    case 'importCode': {
+      const raw = $('#xferIn')?.value || '';
+      readCode(raw).then(data => {
+        if (!data || typeof data.srs !== 'object' || typeof data.kana !== 'object') throw new Error('shape');
+        const before = Object.keys(state.srs).length;
+        state = mergeStates(state, Object.assign(freshState(), data));
+        save(); if (remote) { clearTimeout(timer); flush(); }
+        Object.assign(ui.cards, { cur: null, focus: null }); Object.assign(ui.kana, { cur: null, word: null, match: null });
+        ui.xfer = { mode: null, code: '', msg: '' }; $('#scrim').hidden = true; render();
+        toast(`Progress imported · ${Object.keys(state.srs).length - before} new card records`);
+      }).catch(() => { ui.xfer.msg = "That code didn't work. Copy the whole code and try again."; const v = raw; openSettings(); const t = $('#xferIn'); if (t) t.value = v; });
+      break; }
+    case 'romaji': state.settings.romaji = !state.settings.romaji; settingsChanged(); break;
+    case 'autoplay': state.settings.autoplay = !state.settings.autoplay; settingsChanged(); break;
+    case 'rateSet': state.settings.rate = +el.dataset.v; settingsChanged(); speak('こんにちは'); break;
+    case 'batch': state.settings.batch = +el.dataset.v; settingsChanged(); break;
+    case 'reset':
+      if (!resetArmed) { resetArmed = true; openSettings(); setTimeout(() => { resetArmed = false; if (!$('#scrim').hidden) openSettings(); }, 4000); break; }
+      resetArmed = false; { const keep = { settings: state.settings, start: today(), trip: state.trip }; state = Object.assign(freshState(), keep); state.resetAt = Date.now(); state.settingsT = Date.now(); }
+      ui.cards = { filter: 'all', cur: null, shown: false, newDone: 0, done: 0, early: false }; K.cur = null; B.item = null;
+      save(); if (remote) { clearTimeout(timer); flush(); } $('#scrim').hidden = true; render(); toast('Progress erased'); break;
+  }
+});
+document.addEventListener('change', e => {
+  const c = e.target.dataset.change; if (!c) return;
+  if (c === 'cardTopic') { setTopic(e.target.value); render(); return; }
+  if (c === 'focusN') { ui.cards.focusN = +e.target.value; sampleFocus(); ui.cards.cur = null; saveUi(); render(); return; }
+  if (c === 'buildFilter') { ui.build.pid = e.target.value; ui.build.item = null; render(); }
+  if (c === 'start' && e.target.value) { state.start = e.target.value; state.manualDay = 1; settingsChanged(); }
+  if (c === 'trip' && e.target.value) { state.trip = e.target.value; settingsChanged(); }
+});
+document.addEventListener('input', e => { if (e.target.dataset.input === 'focusN') { $('#focusOut').textContent = +e.target.value ? e.target.value : 'Off'; return; } if (e.target.dataset.input === 'phr') { ui.phr.q = e.target.value; $('#phrOut').innerHTML = phrResults(); } });
+document.addEventListener('submit', e => {
+  if (e.target.dataset.form === 'kword') { e.preventDefault(); const v = $('#kanaType').value.trim(); if (v) answerWord(v); return; }
+  if (e.target.dataset.form !== 'kana') return;
+  e.preventDefault();
+  const K = ui.kana, v = $('#kanaType').value.trim().toLowerCase().replace(/[^a-z']/g, ''); if (!v || K.fb) return;
+  const ok = v === K.cur.label || (KALT[K.cur.label] || []).includes(v);
+  answerKana(ok, v);
+});
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, select, textarea') || e.metaKey || e.ctrlKey || e.altKey || !$('#scrim').hidden) return;
+  if (ui.tab === 'cards' && ui.cards.cur) {
+    if ((e.key === ' ' || e.key === 'Enter') && !ui.cards.shown) { e.preventDefault(); ui.cards.shown = true; render(); if (ui.cards.cur.dir === 'p' && state.settings.autoplay) speak(ui.cards.cur.c.jp); }
+    else if (ui.cards.shown && '1234'.includes(e.key)) rateCard(+e.key - 1);
+  } else if (ui.tab === 'kana' && ui.kana.view === 'practice' && ui.kana.ex === 'words' && ui.kana.word) {
+    const w = ui.kana.word;
+    if (!w.fb && ui.kana.input !== 'type' && '1234'.includes(e.key) && w.opts[+e.key - 1]) answerWord(w.opts[+e.key - 1]);
+    else if (w.fb && e.key === 'Enter') { nextWord(); render(); }
+  } else if (ui.tab === 'kana' && ui.kana.view === 'practice' && ui.kana.ex === 'single' && ui.kana.cur) {
+    if (!ui.kana.fb && '1234'.includes(e.key) && !(ui.kana.input === 'type' && ui.kana.mode === 'k2r')) { const o = ui.kana.cur.opts[+e.key - 1]; if (o) answerKana(ui.kana.mode === 'k2r' ? o === ui.kana.cur.label : o === ui.kana.cur.ch, o); }
+    else if (ui.kana.fb && e.key === 'Enter') { nextKana(); render(); }
+  } else if (ui.tab === 'build' && ui.build.result && e.key === 'Enter') { ui.build.item = null; render(); }
+});
+window.addEventListener('pagehide', () => { flush(); });
+
+render();
+initSync();
+loadPacks();
+// Offline app (GitHub Pages build only): the service worker keeps the app and audio cached and fetches updates when online.
+if (window.TABI_PWA && 'serviceWorker' in navigator) {
+  let had = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (had) toast('Update downloaded. It loads next time you open the app.'); had = true; });
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
