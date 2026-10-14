@@ -965,180 +965,300 @@ VOCAB.forEach(w => CARDS.push({ id: 'w' + hash(w.r + '|' + w.e), kind: 'word', j
 VERBS.forEach(v => CARDS.push({ id: 'v' + hash(v.m + '|' + v.base), kind: 'word', jp: v.m, k: v.k, en: 'to ' + v.base, day: v.d, cat: 'verb', extra: 'て-form: ' + v.te + '  ·  past: ' + v.m.slice(0, -2) + 'ました' }));
 PHRASES.forEach(sec => sec.items.forEach(([jp, en]) => CARDS.push({ id: 'p' + hash(jp + '|' + en), kind: 'phrase', jp, en, day: sec.d, cat: sec.id })));
 
-/* ---------- Pattern generator pools ---------- */
+/* ---------- Pattern sentence pools ---------- */
+// Each pattern lists every sentence it can make (all()); drills deal them from a shuffled deck, so nothing repeats until you've seen the lot.
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const stem = m => m.slice(0, -2);
 const sent = (...parts) => parts.filter(Boolean).join(' ').replace(/\s+([.?!,])/g, '$1');
+const tidy = s => s.replace(/\s+/g, ' ').replace(/\s([.?!,])/g, '$1').trim();
+const cross = (a, b, f) => a.flatMap(x => b.map(y => f(x, y)));
 
 // [X, Y, type n|i|na, statement, question, negative]
 const DESC = [
   ['これ', 'すし', 'n', 'This is sushi.', 'Is this sushi?', "This isn't sushi."],
   ['これ', 'おちゃ', 'n', 'This is green tea.', 'Is this green tea?', "This isn't green tea."],
+  ['これ', 'わさび', 'n', 'This is wasabi.', 'Is this wasabi?', "This isn't wasabi."],
   ['それ', 'ビール', 'n', 'That is beer.', 'Is that beer?', "That isn't beer."],
+  ['それ', 'おみやげ', 'n', 'That is a souvenir.', 'Is that a souvenir?', "That isn't a souvenir."],
   ['ここ', 'えき', 'n', 'This is the station.', 'Is this the station?', "This isn't the station."],
+  ['ここ', 'ホテル', 'n', 'This is the hotel.', 'Is this the hotel?', "This isn't the hotel."],
+  ['ここ', 'きょうと', 'n', 'This is Kyoto.', 'Is this Kyoto?', "This isn't Kyoto."],
   ['あれ', 'ふじさん', 'n', 'That over there is Mt. Fuji.', 'Is that Mt. Fuji over there?', "That isn't Mt. Fuji."],
+  ['あれ', 'じんじゃ', 'n', 'That over there is a shrine.', 'Is that a shrine over there?', "That isn't a shrine."],
+  ['あそこ', 'トイレ', 'n', 'Over there is the toilet.', 'Is that the toilet over there?', "That place over there isn't the toilet."],
   ['かのじょ', 'スペインじん', 'n', 'She is Spanish.', 'Is she Spanish?', "She isn't Spanish."],
+  ['かれ', 'にほんじん', 'n', 'He is Japanese.', 'Is he Japanese?', "He isn't Japanese."],
   ['わたし', 'かんこうきゃく', 'n', 'I am a tourist.', 'Am I a tourist?', "I'm not a tourist."],
+  ['きょう', 'にちようび', 'n', 'Today is Sunday.', 'Is today Sunday?', "Today isn't Sunday."],
+  ['あした', 'やすみ', 'n', 'Tomorrow is a day off.', 'Is tomorrow a day off?', "Tomorrow isn't a day off."],
+  ['これ', 'わたし の きっぷ', 'n', 'This is my ticket.', 'Is this my ticket?', "This isn't my ticket."],
+  ['この でんしゃ', 'とうきょう いき', 'n', 'This train goes to Tokyo.', 'Does this train go to Tokyo?', "This train doesn't go to Tokyo."],
+  ['つぎ', 'きょうと', 'n', 'The next stop is Kyoto.', 'Is the next stop Kyoto?', "The next stop isn't Kyoto."],
   ['ラーメン', 'おいしい', 'i', 'Ramen is delicious.', 'Is ramen delicious?', "Ramen isn't delicious."],
+  ['この おちゃ', 'おいしい', 'i', 'This tea is delicious.', 'Is this tea good?', "This tea isn't good."],
   ['ホテル', 'ちかい', 'i', 'The hotel is close.', 'Is the hotel close?', "The hotel isn't close."],
   ['きっぷ', 'たかい', 'i', 'The ticket is expensive.', 'Is the ticket expensive?', "The ticket isn't expensive."],
+  ['この みせ', 'やすい', 'i', 'This shop is cheap.', 'Is this shop cheap?', "This shop isn't cheap."],
   ['えき', 'とおい', 'i', 'The station is far.', 'Is the station far?', "The station isn't far."],
-  ['きょう', 'さむい', 'i', 'Today is cold.', 'Is it cold today?', "It isn't cold today."],
+  ['きょう', 'さむい', 'i', "It's cold today.", 'Is it cold today?', "It isn't cold today."],
+  ['きょう', 'あつい', 'i', "It's hot today.", 'Is it hot today?', "It isn't hot today."],
   ['これ', 'かわいい', 'i', 'This is cute.', 'Is this cute?', "This isn't cute."],
+  ['これ', 'からい', 'i', 'This is spicy.', 'Is this spicy?', "This isn't spicy."],
+  ['これ', 'あまい', 'i', 'This is sweet.', 'Is this sweet?', "This isn't sweet."],
+  ['へや', 'ひろい', 'i', 'The room is spacious.', 'Is the room spacious?', "The room isn't spacious."],
+  ['へや', 'せまい', 'i', 'The room is small.', 'Is the room small?', "The room isn't small."],
+  ['にほんご', 'むずかしい', 'i', 'Japanese is difficult.', 'Is Japanese difficult?', "Japanese isn't difficult."],
+  ['てんき', 'いい', 'i', 'The weather is good.', 'Is the weather good?', "The weather isn't good."],
+  ['しんかんせん', 'はやい', 'i', 'The bullet train is fast.', 'Is the bullet train fast?', "The bullet train isn't fast."],
+  ['きょうと', 'たのしい', 'i', 'Kyoto is fun.', 'Is Kyoto fun?', "Kyoto isn't fun."],
+  ['おんせん', 'きもちいい', 'i', 'The hot spring feels great.', 'Does the hot spring feel good?', "The hot spring doesn't feel good."],
   ['にほん', 'きれい', 'na', 'Japan is beautiful.', 'Is Japan beautiful?', "Japan isn't beautiful."],
+  ['かのじょ', 'きれい', 'na', 'She is beautiful.', 'Is she beautiful?', "She isn't beautiful."],
   ['こうえん', 'しずか', 'na', 'The park is quiet.', 'Is the park quiet?', "The park isn't quiet."],
+  ['かのじょ', 'げんき', 'na', 'She is well.', 'Is she well?', "She isn't well."],
+  ['とうきょう', 'にぎやか', 'na', 'Tokyo is lively.', 'Is Tokyo lively?', "Tokyo isn't lively."],
+  ['ちかてつ', 'べんり', 'na', 'The subway is convenient.', 'Is the subway convenient?', "The subway isn't convenient."],
+  ['この おてら', 'ゆうめい', 'na', 'This temple is famous.', 'Is this temple famous?', "This temple isn't famous."],
+  ['これ', 'だいじょうぶ', 'na', 'This is OK.', 'Is this OK?', "This isn't OK."],
+  ['あした', 'ひま', 'na', "I'm free tomorrow.", 'Are you free tomorrow?', "I'm not free tomorrow."],
 ];
-const NO = [['わたし','パスポート','my passport'],['わたし','にもつ','my luggage'],['わたし','かのじょ','my girlfriend'],['わたし','きっぷ','my ticket'],['かのじょ','さいふ','her wallet'],['にほん','おさけ','Japanese sake'],['えいご','メニュー','the English menu'],['ホテル','かぎ','the hotel key'],['えき','ちず','a map of the station']];
-const THINGS = [['これ','This one'],['みず','Water'],['おちゃ','Green tea'],['コーヒー','A coffee'],['メニュー','The menu'],['おかいけい','The bill'],['はし','Chopsticks'],['ふくろ','A bag'],['レシート','A receipt'],['ちず','A map'],['きっぷ','A ticket']];
-const COUNTABLE = [['ビール','beers'],['コーヒー','coffees'],['ラーメン','bowls of ramen'],['きっぷ','tickets'],['みず','glasses of water']];
-const NUMS = [['ふたつ','Two'],['みっつ','Three'],['よっつ','Four']];
-const PRICE = [['これ','this'],['それ','that'],['あれ','that one over there'],['きっぷ','the ticket'],['へや','the room'],['にゅうじょうりょう','the entry fee'],['ラーメン','the ramen'],['おみやげ','the souvenir'],['ぜんぶ','everything']];
-const ARU = [['ワイファイ','Wi-Fi'],['えいご の メニュー','an English menu'],['ちず','a map'],['タオル','a towel'],['ふくろ','a bag'],['せき','a table free'],['へや','a room free'],['ベジタリアン の メニュー','a vegetarian menu']];
-const CHOOSE = [['これ',"I'll have this."],['ラーメン',"I'll have the ramen."],['すし',"I'll have the sushi."],['カレー',"I'll have the curry."],['とんかつ',"I'll have the tonkatsu."],['うどん',"I'll have the udon."],['ビール',"I'll have a beer."],['おすすめ',"I'll have your recommendation."]];
-const PLACES = [['えき','the station'],['トイレ','the toilet'],['ホテル','the hotel'],['くうこう','the airport'],['コンビニ','a convenience store'],['ぎんこう','the bank'],['でぐち','the exit'],['いりぐち','the entrance'],['のりば','the boarding area'],['きっぷうりば','the ticket office'],['こうばん','the police box'],['くすりや','the pharmacy'],['じんじゃ','the shrine'],['おてら','the temple'],['こうえん','the park'],['びじゅつかん','the art museum']];
-const TRANS = [['でんしゃ','train'],['バス','bus'],['タクシー','taxi'],['ちかてつ','subway'],['しんかんせん','bullet train']];
-// [prefix (object + particle), verb ます form, en base, en past, en rest, tags: t=たい m=ませんか y=ても k=てください]
+const descNeg = (x, y, t) => t === 'i' ? `${x} は ${/^(きもち)?いい$/.test(y) ? y.slice(0, -2) + 'よ' : y.slice(0, -1)}くないです` : `${x} は ${y} じゃないです`;
+const QWORDS = [['これ は なん ですか','What is this?'],['それ は なん ですか','What is that?'],['トイレ は どこ ですか','Where is the toilet?'],['いりぐち は どこ ですか','Where is the entrance?'],['あの ひと は だれ ですか','Who is that person?'],['しゅっぱつ は なんじ ですか','What time is departure?'],['チェックアウト は なんじ ですか','What time is check-out?'],['おすすめ は なん ですか','What do you recommend?'],['これ は にほんご で なん ですか','What is this called in Japanese?'],['きょう は なんようび ですか','What day is it today?'],['おなまえ は なん ですか','What is your name?'],['つぎ の でんしゃ は いつ ですか','When is the next train?'],['どれ が いい ですか','Which one is good?']];
+// [X, Y, english, flags: w = also "where is…?", p = a place (ここ instead of これ)]
+const NO = [['わたし','パスポート','my passport','w'],['わたし','にもつ','my luggage','w'],['わたし','かのじょ','my girlfriend','w'],['わたし','きっぷ','my ticket','w'],['わたし','せき','my seat','pw'],['わたし','かさ','my umbrella','w'],['わたし','ともだち','my friend',''],['かのじょ','さいふ','her wallet','w'],['かのじょ','スマホ','her phone','w'],['かのじょ','かばん','her bag','w'],['にほん','おさけ','Japanese sake',''],['きょうと','おみやげ','a souvenir from Kyoto',''],['えいご','メニュー','the English menu','w'],['ホテル','かぎ','the hotel key','w'],['へや','かぎ','the room key','w'],['えき','ちず','a map of the station',''],['とうきょう','ちず','a map of Tokyo',''],['えき','でぐち','the station exit','pw'],['バス','のりば','the bus stop','pw'],['タクシー','のりば','the taxi rank','pw']];
+const THINGS = [['これ','This one'],['それ','That one'],['あれ','That one over there'],['みず','Water'],['おちゃ','Green tea'],['コーヒー','A coffee'],['ビール','A beer'],['メニュー','The menu'],['えいご の メニュー','The English menu'],['おかいけい','The bill'],['はし','Chopsticks'],['スプーン','A spoon'],['ふくろ','A bag'],['レシート','A receipt'],['ちず','A map'],['きっぷ','A ticket'],['おしぼり','A hot towel'],['おかわり','A refill'],['おなじ もの','The same thing'],['これ と これ','This and this'],['おまもり','A lucky charm']];
+// [item, one, several]
+const COUNTABLE = [['これ','of these','of these'],['ビール','beer','beers'],['コーヒー','coffee','coffees'],['おちゃ','green tea','green teas'],['ラーメン','bowl of ramen','bowls of ramen'],['きっぷ','ticket','tickets'],['みず','glass of water','glasses of water'],['おにぎり','rice ball','rice balls'],['たこやき','portion of takoyaki','portions of takoyaki'],['おまもり','lucky charm','lucky charms']];
+const NUMS = [['ひとつ','One',1],['ふたつ','Two',2],['みっつ','Three',3],['よっつ','Four',4]];
+const PRICE = [['これ','this'],['それ','that'],['あれ','that one over there'],['きっぷ','the ticket'],['しんかんせん の きっぷ','a bullet train ticket'],['へや','the room'],['にゅうじょうりょう','the entry fee'],['ラーメン','the ramen'],['コーヒー','a coffee'],['ビール','a beer'],['おみやげ','the souvenir'],['この かばん','this bag'],['この シャツ','this shirt'],['この きもの','this kimono'],['あの かさ','that umbrella over there'],['タクシー','the taxi']];
+const PRICE_X = [['ぜんぶ で いくら ですか','How much is it all together?'],['ひとり いくら ですか','How much is it per person?'],['ひとつ いくら ですか','How much is one?'],['おとな ひとり いくら ですか','How much is it for one adult?'],['いっぱく いくら ですか','How much is it per night?'],['えき まで いくら ですか','How much is it to the station?'],['くうこう まで いくら ですか','How much is it to the airport?']];
+const ARU = [['ワイファイ','Wi-Fi'],['えいご の メニュー','an English menu'],['ベジタリアン の メニュー','a vegetarian menu'],['ちず','a map'],['タオル','a towel'],['ふくろ','a bag'],['はし','chopsticks'],['じゅうでんき','a charger'],['コインロッカー','coin lockers'],['せき','a table free'],['ふたり の せき','a table for two'],['きんえん せき','non-smoking seats'],['まどがわ の せき','a window seat'],['へや','a room free'],['ほか の いろ','other colours'],['ちいさい サイズ','a smaller size'],['おおきい サイズ','a bigger size'],['おすすめ','any recommendations']];
+const ARU_NEAR = [['コンビニ','a convenience store'],['トイレ','a toilet'],['エーティーエム','an ATM'],['くすりや','a pharmacy'],['えき','a station'],['カフェ','a café'],['ラーメン や','a ramen shop'],['いざかや','an izakaya'],['おんせん','a hot spring'],['スーパー','a supermarket'],['コインランドリー','a laundromat'],['ゆうびんきょく','a post office']];
+const CHOOSE = [['これ','this'],['それ','that'],['ラーメン','the ramen'],['すし','the sushi'],['カレー','the curry'],['とんかつ','the tonkatsu'],['うどん','the udon'],['そば','the soba'],['てんぷら','the tempura'],['やきとり','the yakitori'],['ぎゅうどん','the beef bowl'],['おこのみやき','the okonomiyaki'],['ビール','a beer'],['コーヒー','a coffee'],['つめたい おちゃ','cold tea'],['あたたかい おちゃ','hot tea'],['おすすめ','your recommendation'],['この セット','this set'],['ランチ セット','the lunch set'],['おなじ もの','the same'],['ちいさい サイズ','the small size']];
+const CHOOSE_X = [['ラーメン と ビール に します',"I'll have ramen and a beer."],['すし と おちゃ に します',"I'll have sushi and green tea."],['なに に しますか','What will you have?'],['わたし も それ に します',"I'll have that too."]];
+const PLACES = [['えき','the station'],['ちかてつ の えき','the subway station'],['トイレ','the toilet'],['ホテル','the hotel'],['くうこう','the airport'],['コンビニ','a convenience store'],['ぎんこう','the bank'],['でぐち','the exit'],['いりぐち','the entrance'],['かいさつ','the ticket gate'],['のりば','the boarding area'],['きっぷうりば','the ticket office'],['バスてい','the bus stop'],['エレベーター','the elevator'],['フロント','the front desk'],['こうばん','the police box'],['くすりや','the pharmacy'],['ゆうびんきょく','the post office'],['デパート','the department store'],['レストラン','the restaurant'],['いちば','the market'],['じんじゃ','the shrine'],['おてら','the temple'],['しろ','the castle'],['こうえん','the park'],['びじゅつかん','the art museum'],['わたし の せき','my seat']];
+const CITIES = [['きょうと','Kyoto'],['おおさか','Osaka'],['なら','Nara'],['ひろしま','Hiroshima'],['とうきょう','Tokyo']];
+const LOCAL = [['くうこう','the airport'],['えき','the station'],['ホテル','the hotel'],['じんじゃ','the shrine'],['おてら','the temple'],['こうえん','the park'],['びじゅつかん','the art museum'],['しぶや','Shibuya'],['あさくさ','Asakusa'],['おんせん','the hot spring']];
+const FAR_TRANS = [['しんかんせん','bullet train'],['でんしゃ','train'],['バス','bus']];
+const NEAR_TRANS = [['でんしゃ','train'],['バス','bus'],['タクシー','taxi'],['ちかてつ','subway']];
+const GO_BACK = [['ホテル に タクシー で かえります',"I'm going back to the hotel by taxi."],['ホテル に でんしゃ で かえります',"I'm going back to the hotel by train."],['ホテル に あるいて かえります',"I'm walking back to the hotel."],['スペイン に ひこうき で かえります',"I'm flying back to Spain."],['うち に かえります',"I'm going home."]];
+// [prefix (object + particle), verb ます form, en base, en past, en rest,
+//  tags: f = do/did forms, t = たい, m = ませんか, y = ても いい, k = てください]
 const ACTIONS = [
-  ['すし を','たべます','eat','ate','sushi','tm'],
-  ['ラーメン を','たべます','eat','ate','ramen','tm'],
-  ['ばんごはん を','たべます','eat','ate','dinner','tm'],
-  ['ビール を','のみます','drink','drank','beer','tm'],
-  ['おさけ を','のみます','drink','drank','sake','tm'],
-  ['おみやげ を','かいます','buy','bought','souvenirs','tm'],
-  ['きっぷ を','かいます','buy','bought','a ticket','t'],
-  ['こうよう を','みます','see','saw','the autumn leaves','tm'],
-  ['ふじさん を','みます','see','saw','Mt. Fuji','tm'],
-  ['しゃしん を','とります','take','took','a photo','tkm'],
-  ['おんせん に','いきます','go','went','to a hot spring','tm'],
-  ['じんじゃ に','いきます','go','went','to a shrine','tm'],
-  ['でんしゃ に','のります','get on','got on','the train','t'],
-  ['ホテル に','かえります','go back','went back','to the hotel','tm'],
-  ['にほんご を','はなします','speak','spoke','Japanese','tm'],
-  ['すこし','やすみます','rest','rested','a little','tm'],
-  ['こうえん を','あるきます','walk','walked','in the park','m'],
-  ['カード で','はらいます','pay','paid','by card','ty'],
-  ['にもつ を','あずけます','leave','left','my luggage here','y'],
-  ['ここ で','まちます','wait','waited','here','yk'],
+  ['すし を','たべます','eat','ate','sushi','ftm'],
+  ['ラーメン を','たべます','eat','ate','ramen','ftm'],
+  ['てんぷら を','たべます','eat','ate','tempura','ftm'],
+  ['たこやき を','たべます','eat','ate','takoyaki','ftm'],
+  ['ばんごはん を','たべます','eat','ate','dinner','ftm'],
+  ['あさごはん を','たべます','eat','ate','breakfast','ftm'],
+  ['ここ で','たべます','eat','ate','here','ty'],
+  ['これ を','たべます','eat','ate','this','y'],
+  ['ビール を','のみます','drink','drank','beer','ftm'],
+  ['おさけ を','のみます','drink','drank','sake','ftm'],
+  ['コーヒー を','のみます','drink','drank','coffee','ftm'],
+  ['まっちゃ を','のみます','drink','drank','matcha','ftm'],
+  ['おみやげ を','かいます','buy','bought','souvenirs','ftm'],
+  ['きっぷ を','かいます','buy','bought','a ticket','ft'],
+  ['おまもり を','かいます','buy','bought','a lucky charm','ft'],
+  ['こうよう を','みます','see','saw','the autumn leaves','ftm'],
+  ['ふじさん を','みます','see','saw','Mt. Fuji','ftm'],
+  ['しろ を','みます','see','saw','the castle','ftm'],
+  ['よる の けしき を','みます','see','saw','the night view','ftm'],
+  ['えいが を','みます','watch','watched','a movie','ftm'],
+  ['これ を','みます','look at','looked at','this','y'],
+  ['しゃしん を','とります','take','took','a photo','ftkm'],
+  ['ここ で しゃしん を','とります','take','took','photos here','y'],
+  ['おんせん に','はいります','bathe in','bathed in','the hot spring','ftm'],
+  ['きもの を','きます','wear','wore','a kimono','ftm'],
+  ['おんせん に','いきます','go','went','to a hot spring','ftm'],
+  ['じんじゃ に','いきます','go','went','to a shrine','ftm'],
+  ['きょうと に','いきます','go','went','to Kyoto','ftm'],
+  ['カラオケ に','いきます','go','went','to karaoke','ftm'],
+  ['いざかや に','いきます','go','went','to an izakaya','ftm'],
+  ['かいもの に','いきます','go','went','shopping','ftm'],
+  ['でんしゃ に','のります','get on','got on','the train','ft'],
+  ['しんかんせん に','のります','ride','rode','the bullet train','ftm'],
+  ['つぎ の えき で','おります','get off','got off','at the next station','ft'],
+  ['ホテル に','かえります','go back','went back','to the hotel','ftm'],
+  ['きょうと に','とまります','stay','stayed','in Kyoto','ftm'],
+  ['ともだち に','あいます','meet','met','a friend','ft'],
+  ['とうきょう で','あそびます','have fun','had fun','in Tokyo','ftm'],
+  ['はやく','ねます','go to bed','went to bed','early','ft'],
+  ['また','きます','come','came','again','t'],
+  ['にほんご を','はなします','speak','spoke','Japanese','ftm'],
   ['えいご で','はなします','speak','spoke','in English','yk'],
   ['ゆっくり','はなします','speak','spoke','slowly','k'],
-  ['ちず を','かきます','draw','drew','me a map','k'],
-  ['タクシー を','よびます','call','called','a taxi','k'],
-  ['パスワード を','おしえます','tell','told','me the password','k'],
+  ['すこし','やすみます','rest','rested','a little','ftm'],
+  ['こうえん を','あるきます','walk','walked','in the park','ftm'],
+  ['カード で','はらいます','pay','paid','by card','fty'],
+  ['げんきん で','はらいます','pay','paid','in cash','ty'],
+  ['にもつ を','あずけます','leave','left','my luggage here','y'],
+  ['ここ で','まちます','wait','waited','here','yk'],
+  ['ちょっと','まちます','wait','waited','a moment','k'],
   ['これ を','つかいます','use','used','this','y'],
-  ['ここ で しゃしん を','とります','take','took','photos here','y'],
+  ['トイレ を','つかいます','use','used','the toilet','y'],
+  ['ここ に','すわります','sit','sat','here','y'],
+  ['これ を','もらいます','take','took','this','y'],
+  ['まど を','あけます','open','opened','the window','yk'],
+  ['ドア を','しめます','close','closed','the door','yk'],
   ['もう いちど','いいます','say','said','it once more','k'],
   ['ここ に','かきます','write','wrote','it here','k'],
+  ['ちず を','かきます','draw','drew','me a map','k'],
+  ['タクシー を','よびます','call','called','a taxi','k'],
+  ['けいさつ を','よびます','call','called','the police','k'],
+  ['きゅうきゅうしゃ を','よびます','call','called','an ambulance','k'],
+  ['パスワード を','おしえます','tell','told','me the password','k'],
+  ['みち を','おしえます','tell','told','me the way','k'],
+  ['にほんご を','おしえます','teach','taught','me Japanese','k'],
+  ['これ を','みせます','show','showed','me this','k'],
+  ['みぎ に','まがります','turn','turned','right','k'],
+  ['ひだり に','まがります','turn','turned','left','k'],
+  ['ここ で','とまります','stop','stopped','here','k'],
+  ['','てつだいます','help','helped','me','k'],
 ].map(([pre, m, base, past, rest, tags]) => ({ pre, m, base, past, rest, tags }));
-const act = tag => pick(ACTIONS.filter(a => a.tags.includes(tag)));
+const acts = tag => ACTIONS.filter(a => a.tags.includes(tag));
+// て-forms of the few pattern verbs that have no verb card.
+const TE_X = { すわります: 'すわって', もらいます: 'もらって', みせます: 'みせて' };
+const teOf = m => TE[m] || TE_X[m];
 const HOURS = [['いちじ',1],['にじ',2],['さんじ',3],['よじ',4],['ごじ',5],['ろくじ',6],['しちじ',7],['はちじ',8],['くじ',9],['じゅうじ',10],['じゅういちじ',11],['じゅうにじ',12]];
-const TIMEV = [['おきます','I get up'],['ねます','I go to bed'],['つきます','I arrive'],['かえります','I go back']];
-const HOSHII = [['おみやげ','souvenirs'],['みず','some water'],['ちず','a map'],['あたらしい スマホ','a new smartphone'],['ふくろ','a bag'],['おちゃ','some green tea']];
-const SUKI = [['すし','sushi'],['ラーメン','ramen'],['にほん','Japan'],['おんせん','hot springs'],['ビール','beer'],['コーヒー','coffee'],['こうよう','autumn leaves'],['おさけ','sake']];
-const BODY = [['あたま','I have a headache.'],['おなか','I have a stomachache.'],['あし','My feet hurt.'],['のど','I have a sore throat.'],['ここ','It hurts here.']];
+// [verb phrase, english, plausible hours]
+const TIMEV = [['おきます','I get up',[6,7,8,9]],['あさごはん を たべます','I have breakfast',[7,8]],['でます','I leave',[8,9,10]],['チェックアウト します','I check out',[10,11]],['つきます','I arrive',[1,2,3,4,5]],['ばんごはん を たべます','I have dinner',[6,7]],['かえります','I go back',[5,6,9]],['ねます','I go to bed',[10,11,12]]];
+const TIME_X = [['なんじ に あいますか','What time shall we meet?'],['なんじ に いきますか','What time are we going?'],['なんじ に おきますか','What time are you getting up?']];
+const HOSHII = [['おみやげ','souvenirs'],['みず','some water'],['おちゃ','some green tea'],['コーヒー','a coffee'],['つめたい ビール','a cold beer'],['あまい もの','something sweet'],['ちず','a map'],['ふくろ','a bag'],['かさ','an umbrella'],['おまもり','a lucky charm'],['ゆかた','a yukata'],['にほん の おさけ','Japanese sake'],['きれい な はし','nice chopsticks'],['あたらしい くつ','new shoes'],['あたらしい スマホ','a new phone'],['ちいさい かばん','a small bag'],['やすみ','a break'],['もう ひとつ','one more']];
+const SUKI = [['すし','sushi'],['ラーメン','ramen'],['てんぷら','tempura'],['わさび','wasabi'],['なっとう','natto'],['からい もの','spicy food'],['あまい もの','sweet things'],['まっちゃ','matcha'],['おさけ','sake'],['ビール','beer'],['コーヒー','coffee'],['にほん','Japan'],['きょうと','Kyoto'],['おんせん','hot springs'],['こうよう','autumn leaves'],['さくら','cherry blossoms'],['おまつり','festivals'],['りょこう','travelling'],['カラオケ','karaoke'],['アニメ','anime'],['サッカー','football'],['ねこ','cats'],['いぬ','dogs']];
+// [body part, english subject, plural]
+const BODY = [['あたま','My head'],['おなか','My stomach'],['のど','My throat'],['せなか','My back'],['こし','My lower back'],['くび','My neck'],['みみ','My ear'],['て','My hand'],['ひざ','My knee'],['あし','My feet',1],['め','My eyes',1]];
 
 const PATTERNS = [
   { id: 'desu', day: 1, title: 'X は Y です', meaning: 'X is Y',
     formula: [['n','X'],['p','は'],['n','Y'],['f','です']],
     notes: ['は marks the topic: what you are talking about. As a particle it is pronounced "wa", not "ha".', 'です ends a polite sentence, like "is / am / are". Japanese has no "a / the" and no plural forms.', 'Y can be a noun (すし) or an adjective (おいしい, きれい).'],
     examples: [['わたし は スペインじん です','I am Spanish.'],['これ は おちゃ です','This is green tea.'],['ラーメン は おいしい です','Ramen is delicious.']],
-    gen: () => { const d = pick(DESC); return [`${d[0]} は ${d[1]} です`, d[3]]; } },
+    all: () => DESC.map(d => [`${d[0]} は ${d[1]} です`, d[3]]) },
   { id: 'ka', day: 1, title: '… ですか', meaning: 'Turn any sentence into a question',
     formula: [['n','X'],['p','は'],['n','Y'],['f','です'],['p','か']],
     notes: ['Add か to the end of a sentence and it becomes a question. The word order does not change.', 'Answer with はい (yes) or いいえ (no).', 'Question words go where the answer would be: これ は なん ですか = "What is this?"'],
     examples: [['これ は すし ですか','Is this sushi?'],['トイレ は どこ ですか','Where is the toilet?'],['これ は なん ですか','What is this?']],
-    gen: () => { const d = pick(DESC); return [`${d[0]} は ${d[1]} ですか`, d[4]]; } },
+    all: () => [...DESC.map(d => [`${d[0]} は ${d[1]} ですか`, d[4]]), ...QWORDS] },
   { id: 'neg', day: 1, title: 'X は Y じゃないです', meaning: 'X is not Y',
     formula: [['n','X'],['p','は'],['n','Y'],['f','じゃないです']],
     notes: ['Nouns and な-adjectives (きれい, しずか): replace です with じゃないです.', 'い-adjectives (たかい, おいしい): drop the final い and add くないです. たかい → たかくないです.', 'One exception: いい (good) → よくないです.'],
     examples: [['これ は ビール じゃないです',"This isn't beer."],['きっぷ は たかくないです',"The ticket isn't expensive."]],
-    gen: () => { const d = pick(DESC); return [d[2] === 'i' ? `${d[0]} は ${d[1].slice(0, -1)}くないです` : `${d[0]} は ${d[1]} じゃないです`, d[5]]; } },
+    all: () => DESC.map(d => [descNeg(d[0], d[1], d[2]), d[5]]) },
   { id: 'no', day: 1, title: 'X の Y', meaning: "X's Y / the Y of X",
     formula: [['n','X'],['p','の'],['n','Y']],
     notes: ['の links two nouns. The first one owns or describes the second.', 'わたし の = my, かのじょ の = her. It also works for places and languages: えき の でぐち (the station exit), えいご の メニュー (the English menu).'],
     examples: [['これ は わたし の パスポート です','This is my passport.'],['えいご の メニュー は ありますか','Do you have an English menu?']],
-    gen: () => { const [x, y, en] = pick(NO); return [`これ は ${x} の ${y} です`, `This is ${en}.`]; } },
+    all: () => NO.flatMap(([x, y, e, f]) => [[`${f.includes('p') ? 'ここ' : 'これ'} は ${x} の ${y} です`, `This is ${e}.`]]
+      .concat(f.includes('w') ? [[`${x} の ${y} は どこ ですか`, `Where is ${e}?`]] : [])) },
   { id: 'kudasai', day: 2, title: 'X を ください', meaning: 'X, please (ordering or buying)',
     formula: [['n','X'],['p','を'],['n','number'],['f','ください']],
     notes: ['を marks the object: the thing you want.', 'Put a quantity right before ください: みず を ふたつ ください = "Two waters, please."', 'Counting things: ひとつ, ふたつ, みっつ, よっつ, いつつ. Counting people: ひとり, ふたり.', 'Shorter and still polite: これ、おねがいします.'],
     examples: [['これ を ください','This one, please.'],['ビール を ふたつ ください','Two beers, please.']],
-    gen: () => { if (Math.random() < .5) { const [x, en] = pick(COUNTABLE), [n, N] = pick(NUMS); return [`${x} を ${n} ください`, `${N} ${en}, please.`]; } const [x, en] = pick(THINGS); return [`${x} を ください`, `${en}, please.`]; } },
+    all: () => [...THINGS.map(([x, e]) => [`${x} を ください`, `${e}, please.`]),
+      ...cross(COUNTABLE, NUMS, ([x, one, many], [n, N, k]) => [`${x} を ${n} ください`, `${N} ${k === 1 ? one : many}, please.`])] },
   { id: 'ikura', day: 2, title: 'X は いくら ですか', meaning: 'How much is X?',
     formula: [['n','X'],['p','は'],['f','いくら'],['f','ですか']],
     notes: ['いくら = how much. Prices are number + えん (円). 1,500 = せん ごひゃく えん.', 'Big numbers group by 10,000 (まん): 10,000 = いちまん, 30,000 = さんまん.', 'Sound changes to recognise: 300 さんびゃく, 600 ろっぴゃく, 800 はっぴゃく, 3,000 さんぜん, 8,000 はっせん.'],
     examples: [['これ は いくら ですか','How much is this?'],['ぜんぶ で いくら ですか','How much is it all together?']],
-    gen: () => { const [x, en] = pick(PRICE); return [`${x} は いくら ですか`, `How much is ${en}?`]; } },
+    all: () => [...PRICE.map(([x, e]) => [`${x} は いくら ですか`, `How much is ${e}?`]), ...PRICE_X] },
   { id: 'aru', day: 3, title: 'X は ありますか', meaning: 'Do you have X? / Is there X?',
     formula: [['n','X'],['p','は'],['v','あります'],['p','か']],
     notes: ['あります = "there is / to have" for things. For people and animals use います.', 'Answers: はい、あります (yes, we have) / いいえ、ありません (no, we don\'t).', 'Negative of any ます verb: ます → ません.'],
     examples: [['えいご の メニュー は ありますか','Do you have an English menu?'],['ワイファイ は ありますか','Is there Wi-Fi?']],
-    gen: () => { const [x, en] = pick(ARU); return [`${x} は ありますか`, `Do you have ${en}?`]; } },
+    all: () => [...ARU.map(([x, e]) => [`${x} は ありますか`, `Do you have ${e}?`]),
+      ...ARU_NEAR.map(([x, e]) => [`この ちかく に ${x} は ありますか`, `Is there ${e} near here?`])] },
   { id: 'nishimasu', day: 3, title: 'X に します', meaning: "I'll have X (choosing)",
     formula: [['n','X'],['p','に'],['v','します']],
     notes: ['Use it when you pick something from a menu or a list of options.', 'に marks the choice; します = "do / make".', 'Combine with a number: ラーメン に します。ふたつ おねがいします.'],
     examples: [['これ に します',"I'll have this."],['てんぷら に します',"I'll have the tempura."]],
-    gen: () => { const [x, en] = pick(CHOOSE); return [`${x} に します`, en]; } },
+    all: () => [...CHOOSE.map(([x, e]) => [`${x} に します`, `I'll have ${e}.`]), ...CHOOSE_X] },
   { id: 'doko', day: 4, title: 'X は どこ ですか', meaning: 'Where is X?',
     formula: [['n','X'],['p','は'],['f','どこ'],['f','ですか']],
     notes: ['どこ = where. Same shape as X は Y です with どこ in the Y slot.', 'Answers you may hear: あそこ です (over there), みぎ (right), ひだり (left), まっすぐ (straight on).', 'Start with すみません to get someone\'s attention politely.'],
     examples: [['すみません、 えき は どこ ですか','Excuse me, where is the station?']],
-    gen: () => { const [x, en] = pick(PLACES); return [`${x} は どこ ですか`, `Where is ${en}?`]; } },
+    all: () => PLACES.flatMap(([x, e]) => [[`${x} は どこ ですか`, `Where is ${e}?`], [`すみません、 ${x} は どこ ですか`, `Excuse me, where is ${e}?`]]) },
   { id: 'iku', day: 4, title: 'X に Y で いきます', meaning: 'I go to X by Y',
     formula: [['n','place'],['p','に'],['n','vehicle'],['p','で'],['v','いきます']],
     notes: ['に after a place = "to" (the destination). へ (said "e") also works.', 'で after a vehicle = "by / using". でんしゃ で = by train. On foot is あるいて.', 'Works the same with きます (come) and かえります (go back).'],
     examples: [['くうこう に でんしゃ で いきます',"I'll go to the airport by train."],['ホテル に かえります',"I'm going back to the hotel."]],
-    gen: () => { const [x, en] = pick(PLACES.slice(2)); if (Math.random() < .55) { const [t, ten] = pick(TRANS); return [`${x} に ${t} で いきます`, `I'm going to ${en} by ${ten}.`]; } return [`${x} に いきます`, `I'm going to ${en}.`]; } },
+    all: () => [
+      ...cross(CITIES, FAR_TRANS, ([x, e], [t, te]) => [`${x} に ${t} で いきます`, `I'm going to ${e} by ${te}.`]),
+      ...cross(LOCAL, NEAR_TRANS, ([x, e], [t, te]) => [`${x} に ${t} で いきます`, `I'm going to ${e} by ${te}.`]),
+      ...[...CITIES, ...LOCAL].map(([x, e]) => [`${x} に いきます`, `I'm going to ${e}.`]),
+      ...LOCAL.slice(1, 7).map(([x, e]) => [`${x} に あるいて いきます`, `I'm walking to ${e}.`]),
+      ...GO_BACK] },
   { id: 'forms', day: 4, title: 'V-ます / ません / ました', meaning: 'Polite verb endings: do, don\'t, did, didn\'t',
     formula: [['n','X'],['p','を'],['v','stem'],['f','ます · ません · ました']],
     notes: ['All verbs here are in the polite ます form. Only the ending changes:', 'ます = do / will do · ません = don\'t / won\'t · ました = did · ませんでした = didn\'t.', 'Add か for a question: いきますか = "Are you going?"', 'The verb always comes last. The object takes を: すし を たべます.'],
     examples: [['すし を たべました','I ate sushi.'],['きょう は いきません',"I'm not going today."]],
-    gen: () => { const a = pick(ACTIONS.filter(a => /[tm]/.test(a.tags))); const s = stem(a.m); const f = pick([
+    all: () => acts('f').flatMap(a => { const s = stem(a.m); return [
       [s + 'ます', `I ${a.base} ${a.rest}.`], [s + 'ません', `I don't ${a.base} ${a.rest}.`], [s + 'ました', `I ${a.past} ${a.rest}.`],
-      [s + 'ませんでした', `I didn't ${a.base} ${a.rest}.`], [s + 'ますか', `Do you ${a.base} ${a.rest}?`]]);
-      return [sent(a.pre, f[0]), f[1]]; } },
+      [s + 'ませんでした', `I didn't ${a.base} ${a.rest}.`], [s + 'ますか', `Do you ${a.base} ${a.rest}?`]].map(([v, e]) => [sent(a.pre, v), tidy(e)]); }) },
   { id: 'time', day: 4, title: 'Time に V-ます', meaning: 'At (time), I do V',
     formula: [['n','time'],['p','に'],['v','V-ます']],
     notes: ['に after a clock time = "at". ろくじ に = at 6:00.', 'Hours are number + じ. Irregular ones: よじ (4), しちじ (7), くじ (9).', 'Half past = はん: ろくじ はん = 6:30. Put ごぜん (a.m.) or ごご (p.m.) in front if needed.'],
     examples: [['しちじ に おきます','I get up at 7.'],['ごご さんじ に つきます','I arrive at 3 p.m.']],
-    gen: () => { const [h, n] = pick(HOURS), [v, en] = pick(TIMEV), half = Math.random() < .3; return [sent(h, half ? 'はん' : '', 'に', v), `${en} at ${n}:${half ? '30' : '00'}.`]; } },
+    all: () => [...TIMEV.flatMap(([v, e, hs]) => hs.flatMap(n => { const h = HOURS[n - 1][0];
+      return [[sent(h, 'に', v), `${e} at ${n}:00.`], [sent(h, 'はん', 'に', v), `${e} at ${n}:30.`]]; })), ...TIME_X] },
   { id: 'tai', day: 5, title: 'X を V-たい です', meaning: 'I want to V (X)',
     formula: [['n','X'],['p','を'],['v','stem'],['f','たい'],['f','です']],
     notes: ['Take the ます form, drop ます, add たい です: たべます → たべたい です.', 'Don\'t want to: たくない です. たべたくない です = I don\'t want to eat.', 'Asking a stranger what they want is a little direct, but with your travel partner it is perfectly natural: なに を たべたい?'],
     examples: [['すし を たべたい です','I want to eat sushi.'],['ふじさん を みたい です','I want to see Mt. Fuji.']],
-    gen: () => { const a = act('t'); return [sent(a.pre, stem(a.m) + 'たい', 'です'), `I want to ${a.base} ${a.rest}.`]; } },
+    all: () => acts('t').flatMap(a => [
+      [sent(a.pre, stem(a.m) + 'たい', 'です'), tidy(`I want to ${a.base} ${a.rest}.`)],
+      [sent(a.pre, stem(a.m) + 'たくない', 'です'), tidy(`I don't want to ${a.base} ${a.rest}.`)],
+      [sent(a.pre, stem(a.m) + 'たい', 'ですか'), tidy(`Do you want to ${a.base} ${a.rest}?`)]]) },
   { id: 'temo', day: 5, title: 'V-ても いいですか', meaning: 'May I V?',
     formula: [['n','X'],['p','を'],['v','て-form'],['f','も'],['f','いいですか']],
     notes: ['Take the て-form of the verb (every verb card shows it) and add も いいですか.', 'とります → とって → とっても いいですか.', 'Answers: はい、どうぞ (yes, go ahead) / すみません、ちょっと… (sorry, that\'s a bit… = no).'],
     examples: [['しゃしん を とっても いいですか','May I take a photo?'],['カード で はらっても いいですか','May I pay by card?']],
-    gen: () => { const a = act('y'); return [sent(a.pre, TE[a.m] + 'も', 'いいですか'), `May I ${a.base} ${a.rest}?`]; } },
+    all: () => acts('y').map(a => [sent(a.pre, teOf(a.m) + 'も', 'いいですか'), tidy(`May I ${a.base} ${a.rest}?`)]) },
   { id: 'hoshii', day: 5, title: 'X が ほしい です', meaning: 'I want (a thing)',
     formula: [['n','X'],['p','が'],['f','ほしい'],['f','です']],
     notes: ['ほしい is for wanting things. To want to DO something, use たい.', 'The thing you want takes が, not を.', 'In a shop, X を ください is the more polite way to ask for it.'],
     examples: [['あたらしい スマホ が ほしい です','I want a new smartphone.']],
-    gen: () => { const [x, en] = pick(HOSHII); return [`${x} が ほしい です`, `I want ${en}.`]; } },
+    all: () => HOSHII.flatMap(([x, e]) => [[`${x} が ほしい です`, `I want ${e}.`], [`${x} が ほしい ですか`, `Do you want ${e}?`]]) },
   { id: 'tekudasai', day: 6, title: 'V-て ください', meaning: 'Please V (asking someone to do something)',
     formula: [['n','X'],['p','を'],['v','て-form'],['f','ください']],
     notes: ['て-form + ください = a polite request.', 'Making the て-form from ます: 〜います / 〜ちます / 〜ります → 〜って · 〜みます / 〜びます → 〜んで · 〜きます → 〜いて · 〜します → 〜して · most 〜えます verbs and みます → drop ます, add て. Exception: いきます → いって.', 'No need to memorise the rule this week: the て-form is printed on every verb card.'],
     examples: [['ゆっくり はなして ください','Please speak slowly.'],['しゃしん を とって ください','Could you take a photo of us?']],
-    gen: () => { const a = act('k'); return [sent(a.pre, TE[a.m], 'ください'), `Please ${a.base} ${a.rest}.`]; } },
+    all: () => acts('k').map(a => [sent(a.pre, teOf(a.m), 'ください'), tidy(`Please ${a.base} ${a.rest}.`)]) },
   { id: 'masenka', day: 6, title: 'いっしょに V-ませんか', meaning: 'Shall we V together? / Let\'s V',
     formula: [['f','いっしょに'],['n','X'],['p','を'],['v','stem'],['f','ませんか / ましょう']],
     notes: ['ませんか (literally "won\'t you?") is a soft, polite invitation.', 'ましょう = "let\'s". いきましょう = let\'s go!', 'いっしょに = together. Handy when you travel with someone.'],
     examples: [['いっしょに ラーメン を たべませんか','Shall we eat ramen together?'],['いきましょう',"Let's go!"]],
-    gen: () => { const a = act('m'); return Math.random() < .5
-      ? [sent('いっしょに', a.pre, stem(a.m) + 'ませんか'), `Shall we ${a.base} ${a.rest} together?`]
-      : [sent('いっしょに', a.pre, stem(a.m) + 'ましょう'), `Let's ${a.base} ${a.rest} together!`]; } },
+    all: () => acts('m').flatMap(a => [
+      [sent('いっしょに', a.pre, stem(a.m) + 'ませんか'), tidy(`Shall we ${a.base} ${a.rest} together?`)],
+      [sent('いっしょに', a.pre, stem(a.m) + 'ましょう'), tidy(`Let's ${a.base} ${a.rest} together!`)]]) },
   { id: 'suki', day: 6, title: 'X が すき です', meaning: 'I like X',
     formula: [['n','X'],['p','が'],['f','すき'],['f','です']],
     notes: ['すき = liked. The thing you like takes が.', 'だいすき = love / like a lot. ちょっと にがて です = not really my thing (a polite dislike).', 'Question: X が すき ですか = Do you like X?'],
     examples: [['にほん が だいすき です','I love Japan.'],['おんせん が すき ですか','Do you like hot springs?']],
-    gen: () => { const [x, en] = pick(SUKI); return pick([[`${x} が すき です`, `I like ${en}.`], [`${x} が だいすき です`, `I love ${en}.`], [`${x} が すき ですか`, `Do you like ${en}?`]]); } },
+    all: () => [...SUKI.flatMap(([x, e]) => [[`${x} が すき です`, `I like ${e}.`], [`${x} が だいすき です`, `I love ${e}.`],
+      [`${x} が すき ですか`, `Do you like ${e}?`], [`${x} が ちょっと にがて です`, `I'm not a big fan of ${e}.`]]), ['あなた が だいすき です', 'I love you.']] },
   { id: 'itai', day: 6, title: 'X が いたい です', meaning: 'My X hurts',
     formula: [['n','body part'],['p','が'],['f','いたい'],['f','です']],
     notes: ['いたい = painful. Point and say ここ が いたい です (it hurts here).', 'For feeling ill in general: きぶん が わるい です.', 'If it is serious: きゅうきゅうしゃ を よんで ください (please call an ambulance).'],
     examples: [['あたま が いたい です','I have a headache.']],
-    gen: () => { const [x, en] = pick(BODY); return [`${x} が いたい です`, en]; } },
+    all: () => [...BODY.flatMap(([x, s, pl]) => { const v = pl ? 'hurt' : 'hurts';
+      return [[`${x} が いたい です`, `${s} ${v}.`], [`${x} が すこし いたい です`, `${s} ${v} a little.`], [`${x} が とても いたい です`, `${s} really ${v}.`]]; }),
+      ['ここ が いたい です', 'It hurts here.'], ['ここ が すこし いたい です', 'It hurts a little here.'], ['ここ が とても いたい です', 'It really hurts here.']] },
 ];
 const PMAP = Object.fromEntries(PATTERNS.map(p => [p.id, p]));
+// Each pattern deals from its own shuffled deck (kept across visits), so a sentence only comes back once you've seen all the others.
+const DECKS = (() => { try { return JSON.parse(localStorage.getItem('tabi-decks') || '{}'); } catch (e) { return {}; } })();
+PATTERNS.forEach(p => {
+  const seen = new Set();
+  p.list = p.all().filter(([jp]) => !seen.has(jp) && seen.add(jp));
+  p.gen = () => {
+    let d = (DECKS[p.id] || []).filter(i => i < p.list.length);
+    if (!d.length) { d = shuffled(p.list.map((_, i) => i)); if (d.length > 1 && d[d.length - 1] === p.last) d.unshift(d.pop()); }
+    p.last = d.pop(); DECKS[p.id] = d;
+    try { localStorage.setItem('tabi-decks', JSON.stringify(DECKS)); } catch (e) {}
+    return p.list[p.last];
+  };
+});
 
 /* ---------- Kana sets ---------- */
 const rowsOf = arr => arr.map(r => (typeof r === 'string' ? r.split('') : r).map(c => (c === '_' ? null : c)));
@@ -1839,7 +1959,7 @@ function viewPatterns() {
     <section class="stack"><div class="eyebrow">Day ${p.day} pattern</div><h1 class="jp">${esc(p.title)}</h1><p class="lede">${esc(p.meaning)}</p>${formulaHtml(p.formula)}</section>
     <section class="panel"><h2>How it works</h2><ul class="notes">${p.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul></section>
     <section class="panel"><h2>Examples</h2>${p.examples.map(([jp, en]) => `<div class="ex">${jpLine(jp)}<div class="en">${esc(en)}</div>${speakBtn(jp)}</div>`).join('')}</section>
-    <section class="panel stack"><h2>Quick drill</h2><p class="small muted">Say the Japanese out loud, then check.</p>
+    <section class="panel stack"><h2>Quick drill</h2><p class="small muted">Say the Japanese out loud, then check. ${p.list.length} sentences, shuffled: none comes back until you've seen them all.</p>
       <div class="prompt"><div class="en">${esc(P.drill[1])}</div></div>
       ${P.shown ? `<div class="solution">${jpLine(P.drill[0])}${speakBtn(P.drill[0])}</div><div class="row"><button class="btn primary" data-act="drillNext">Next sentence</button><button class="btn" data-act="buildPat" data-id="${p.id}">Build with tiles</button></div>`
         : `<div class="row"><button class="btn primary" data-act="drillShow">Show answer</button><button class="btn" data-act="buildPat" data-id="${p.id}">Build with tiles</button></div>`}
